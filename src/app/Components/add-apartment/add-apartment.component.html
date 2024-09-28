@@ -1,0 +1,187 @@
+<div class="container mt-5">
+  <h2 class="mb-4 fw-medium">Add Your Apartment</h2>
+  <form>
+    <!-- Basic Information -->
+    <div class="card mb-4">
+      <div class="card-header main-color-bg text-white">Basic Information</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="nameEn" class="form-label">Name (English)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nameEn"
+              required
+              minlength="3"
+              maxlength="50"
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="nameAr" class="form-label">Name (Arabic)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nameAr"
+              required
+              minlength="3"
+              maxlength="50"
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="descriptionEn" class="form-label"
+            >Description (English)</label
+          >
+          <textarea
+            class="form-control"
+            id="descriptionEn"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="descriptionAr" class="form-label"
+            >Description (Arabic)</label
+          >
+          <textarea
+            class="form-control"
+            id="descriptionAr"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="tel" class="form-control" id="phone" required />
+        </div>
+      </div>
+    </div>
+
+    <!-- Location -->
+    <div class="card mb-4">
+      <div class="card-header main-color-bg text-white">Location</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="addressEn" class="form-label">Address (English)</label>
+            <input type="text" class="form-control" id="addressEn" required />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="addressAr" class="form-label">Address (Arabic)</label>
+            <input type="text" class="form-control" id="addressAr" required />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cityEn" class="form-label">City (English)</label>
+            <input type="text" class="form-control" id="cityEn" required />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cityAr" class="form-label">City (Arabic)</label>
+            <input type="text" class="form-control" id="cityAr" required />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="countryEn" class="form-label">Country (English)</label>
+            <input type="text" class="form-control" id="countryEn" required />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="countryAr" class="form-label">Country (Arabic)</label>
+            <input type="text" class="form-control" id="countryAr" required />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- House Rules -->
+    <div class="card mb-4">
+      <div class="card-header main-color-bg text-white">House Rules</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="noSmoking" />
+              <label class="form-check-label" for="noSmoking">No Smoking</label>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="noPets" />
+              <label class="form-check-label" for="noPets">No Pets</label>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="noParties" />
+              <label class="form-check-label" for="noParties">No Parties</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="checkInTime" class="form-label">Check-in Time</label>
+            <input type="time" class="form-control" id="checkInTime" required />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="checkOutTime" class="form-label">Check-out Time</label>
+            <input
+              type="time"
+              class="form-control"
+              id="checkOutTime"
+              required
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="pricePerNight" class="form-label">Price per Night</label>
+          <input
+            type="number"
+            class="form-control"
+            id="pricePerNight"
+            required
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Facilities -->
+    <div class="card mb-4">
+      <div class="card-header main-color-bg text-white">Facilities</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4 mb-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="wifi" />
+              <label class="form-check-label" for="wifi">WiFi</label>
+            </div>
+          </div>
+          <div class="col-md-4 mb-2">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="airConditioning"
+              />
+              <label class="form-check-label" for="airConditioning"
+                >Air Conditioning</label
+              >
+            </div>
+          </div>
+          <div class="col-md-4 mb-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="parking" />
+              <label class="form-check-label" for="parking">Parking</label>
+            </div>
+          </div>
+          <!-- Add more facilities checkboxes as needed -->
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn main-color-bg-hover text-white">
+      Submit
+    </button>
+  </form>
+</div>
