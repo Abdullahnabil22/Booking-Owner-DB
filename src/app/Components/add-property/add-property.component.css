@@ -1,0 +1,13 @@
+.add-property-card {
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  height: 200px;
+  width: 300px;
+  cursor: pointer;
+}
+
+.add-property-card:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
