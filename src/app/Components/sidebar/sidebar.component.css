@@ -1,0 +1,30 @@
+.sidebar {
+  height: 100vh;
+
+  position: fixed;
+
+  left: 0;
+  padding-top: 20px;
+  overflow-y: auto;
+  padding-left: 40px;
+  background-color: #003b95;
+}
+
+.nav-link {
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.nav-link:hover {
+  background-color: #022a6f;
+}
+
+.nav-link.active:hover {
+  background-color: #ffb204;
+}
+
+.active {
+  font-weight: bold;
+  background-color: #ffb204;
+  color: white;
+}
