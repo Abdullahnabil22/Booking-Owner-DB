@@ -25,32 +25,58 @@
             />
           </div>
         </div>
-        <div class="mb-3">
-          <label for="descriptionEn" class="form-label"
-            >Description (English)</label
-          >
-          <textarea
-            class="form-control"
-            id="descriptionEn"
-            rows="3"
-            formControlName="descriptionEn"
-          ></textarea>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="descriptionEn" class="form-label"
+              >Description (English)</label
+            >
+            <textarea
+              class="form-control"
+              id="descriptionEn"
+              rows="3"
+              formControlName="descriptionEn"
+            ></textarea>
+          </div>
+          <div class="col-md-6">
+            <label for="descriptionAr" class="form-label"
+              >Description (Arabic)</label
+            >
+            <textarea
+              class="form-control"
+              id="descriptionAr"
+              rows="3"
+              formControlName="descriptionAr"
+            ></textarea>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="descriptionAr" class="form-label"
-            >Description (Arabic)</label
-          >
-          <textarea
-            class="form-control"
-            id="descriptionAr"
-            rows="3"
-            formControlName="descriptionAr"
-          ></textarea>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="subDescriptionEn" class="form-label"
+              >Sub Description (English)</label
+            >
+            <textarea
+              class="form-control"
+              id="subDescriptionEn"
+              rows="3"
+              formControlName="subDescriptionEn"
+            ></textarea>
+          </div>
+          <div class="col-md-6">
+            <label for="subDescriptionAr" class="form-label"
+              >Sub Description (Arabic)</label
+            >
+            <textarea
+              class="form-control"
+              id="subDescriptionAr"
+              rows="3"
+              formControlName="subDescriptionAr"
+            ></textarea>
+          </div>
         </div>
         <div class="mb-3">
           <label for="phone" class="form-label">Phone</label>
           <input
-            type="tel"
+            type="number"
             class="form-control"
             id="phone"
             formControlName="phone"
@@ -134,7 +160,7 @@
           <div class="col-md-4 mb-3">
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input border-black"
                 type="checkbox"
                 id="noSmoking"
                 formControlName="noSmoking"
@@ -145,7 +171,7 @@
           <div class="col-md-4 mb-3">
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input border-black"
                 type="checkbox"
                 id="noPets"
                 formControlName="noPets"
@@ -156,7 +182,7 @@
           <div class="col-md-4 mb-3">
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input border-black"
                 type="checkbox"
                 id="noParties"
                 formControlName="noParties"
@@ -194,140 +220,114 @@
             formControlName="pricePerNight"
           />
         </div>
+        <h6 class="fw-medium">Cancellation</h6>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cancellationPolicy" class="form-label">
+              Cancellation Policy (English)
+            </label>
+            <textarea
+              class="form-control"
+              id="cancellationPolicy"
+              rows="3"
+              formControlName="cancellationPolicy"
+            ></textarea>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cancellationPolicyAr" class="form-label">
+              Cancellation Policy (Arabic)
+            </label>
+            <textarea
+              class="form-control"
+              id="cancellationPolicyAr"
+              rows="3"
+              formControlName="cancellationPolicyAr"
+            ></textarea>
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-md-6 mb-3">
+            <div class="form-check">
+              <input
+                class="form-check-input border-black"
+                type="checkbox"
+                id="refundable"
+                formControlName="refundable"
+              />
+              <label class="form-check-label" for="refundable"
+                >Money is Refundable</label
+              >
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="deadlineDays" class="form-label">Deadline Days</label>
+            <input
+              type="number"
+              class="form-control"
+              id="deadlineDays"
+              formControlName="deadlineDays"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- New Photo Upload Section -->
+    <div class="card mb-4">
+      <div class="card-header main-color-bg text-white">Photo Upload</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="photoUpload" class="form-label"
+            >Upload Hotel Photos</label
+          >
+          <input
+            type="file"
+            class="form-control"
+            id="photoUpload"
+            (change)="onFileSelected($event)"
+            multiple
+            accept="image/*"
+          />
+        </div>
+        <div *ngIf="selectedFiles.length > 0" class="mt-3">
+          <p>Selected Files:</p>
+          <ul>
+            <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <!-- Amenities (Grouped) -->
     <div class="card mb-4">
       <div class="card-header main-color-bg text-white">Amenities</div>
-      <div class="card-body">
-        <div formGroupName="amenities">
-          <!-- Room Amenities -->
-          <div formGroupName="room">
-            <h5>Room Amenities</h5>
-            <div class="row">
-              <div class="col-md-4 mb-3" *ngFor="let amenity of roomAmenities">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    [id]="amenity"
-                    [formControlName]="amenity"
-                  />
-                  <label class="form-check-label" [for]="amenity">{{
-                    amenity
-                  }}</label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Bathroom Amenities -->
-          <div formGroupName="bathroom">
-            <h5>Bathroom Amenities</h5>
+      <div class="card-body" formGroupName="amenities">
+        <ng-container *ngFor="let amenityGroup of amenityGroups">
+          <div [formGroupName]="amenityGroup.name">
+            <h5>{{ amenityGroup.title }}</h5>
             <div class="row">
               <div
                 class="col-md-4 mb-3"
-                *ngFor="let amenity of bathroomAmenities"
+                *ngFor="let amenity of amenityGroup.amenities"
               >
                 <div class="form-check">
                   <input
                     class="form-check-input"
                     type="checkbox"
-                    [id]="amenity"
                     [formControlName]="amenity"
                   />
-                  <label class="form-check-label" [for]="amenity">{{
-                    amenity
-                  }}</label>
+                  <label class="form-check-label">{{ amenity }}</label>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </div>
-
-    <!-- Room Types -->
-    <div class="card mb-4">
-      <div class="card-header main-color-bg text-white">Room Types</div>
-      <div class="card-body">
-        <div formArrayName="roomTypes">
-          <div
-            *ngFor="let roomType of roomTypesFormArray.controls; let i = index"
-            [formGroupName]="i"
-            class="mb-3"
-          >
-            <h5>Room Type {{ i + 1 }}</h5>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="roomTypeNameEn" class="form-label"
-                  >Name (English)</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="nameEn"
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="roomTypeNameAr" class="form-label"
-                  >Name (Arabic)</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  formControlName="nameAr"
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="beds" class="form-label">Beds</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="beds"
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="numberOfRooms" class="form-label"
-                  >Number of Rooms</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="numberOfRooms"
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div
-                class="col-md-4 mb-3"
-                *ngFor="let benefit of roomBenefits; let i = index"
-              >
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    [formControlName]="benefit"
-                  />
-                  <label class="form-check-label">{{ benefit }}</label>
-                </div>
-              </div>
-              <div *ngIf="(i + 1) % 3 === 0" class="w-100"></div>
-            </div>
-          </div>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="addRoomType()"
-          >
-            Add Room Type
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="hotelForm.invalid || isLoading"
+    >
+      Submit
+    </button>
   </form>
 </div>
