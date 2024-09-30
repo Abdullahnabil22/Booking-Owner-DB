@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin, from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -18,7 +18,12 @@ export class HotelService {
     return this.uploadImages(hotel.photos).pipe(
       switchMap((photoUrls: string[]) => {
         hostData.photos = photoUrls;
-        return this.http.post<any>(`${this.apiUrl}/host`, hostData);
+        return this.http.post<any>(`${this.apiUrl}/host`, hostData, {
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }),
+        });
       }),
       switchMap((hostResponse: any) => {
         return this.http.post<any>(`${this.apiUrl}/amenities`, {

@@ -1,0 +1,13 @@
+<div *ngIf="message">
+  <h3>Reply to {{ message.user_id.name }}</h3>
+  <p>{{ message.content }}</p>
+  <form (ngSubmit)="sendReply()">
+    <textarea
+      [(ngModel)]="replyContent"
+      name="replyContent"
+      rows="4"
+      required
+    ></textarea>
+    <button type="submit">Send Reply</button>
+  </form>
+</div>

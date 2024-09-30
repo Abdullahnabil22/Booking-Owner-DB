@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { JWTService } from '../../Services/JWT/jwt.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,11 @@ export class LoginComponent implements OnInit {
   password: string = '';
   errorMessage: string = '';
   isUserLoggedIn: boolean = false;
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private jwtService: JWTService
+  ) {}
 
   ngOnInit(): void {
     this.isUserLoggedIn = this.loginService.isUserLoggedIn;
@@ -28,12 +33,13 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.email, this.password).subscribe(
       (response) => {
         console.log('Response received:', response);
-        if (response && response.token) {
+        const decodedToken = this.jwtService.decodeToken(response.token);
+        if (response && response.token && decodedToken.role === 'owner') {
           localStorage.setItem('token', response.token);
           this.router.navigate(['/dashboard']);
           this.isUserLoggedIn = true;
         } else {
-          this.errorMessage = 'Invalid login response';
+          this.errorMessage = 'Access denied. You are not authorized.';
           console.log('Invalid response structure:', response);
         }
       },
