@@ -1,6 +1,6 @@
 <div class="container mt-5">
   <h2 class="mb-4 fw-medium">Add Your Hotel</h2>
-  <form>
+  <form [formGroup]="hotelForm" (ngSubmit)="onSubmit()">
     <!-- Basic Information -->
     <div class="card mb-4">
       <div class="card-header main-color-bg text-white">Basic Information</div>
@@ -12,9 +12,7 @@
               type="text"
               class="form-control"
               id="nameEn"
-              required
-              minlength="3"
-              maxlength="50"
+              formControlName="nameEn"
             />
           </div>
           <div class="col-md-6 mb-3">
@@ -23,37 +21,66 @@
               type="text"
               class="form-control"
               id="nameAr"
-              required
-              minlength="3"
-              maxlength="50"
+              formControlName="nameAr"
             />
           </div>
         </div>
-        <div class="mb-3">
-          <label for="descriptionEn" class="form-label"
-            >Description (English)</label
-          >
-          <textarea
-            class="form-control"
-            id="descriptionEn"
-            rows="3"
-            required
-          ></textarea>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="descriptionEn" class="form-label"
+              >Description (English)</label
+            >
+            <textarea
+              class="form-control"
+              id="descriptionEn"
+              rows="3"
+              formControlName="descriptionEn"
+            ></textarea>
+          </div>
+          <div class="col-md-6">
+            <label for="descriptionAr" class="form-label"
+              >Description (Arabic)</label
+            >
+            <textarea
+              class="form-control"
+              id="descriptionAr"
+              rows="3"
+              formControlName="descriptionAr"
+            ></textarea>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="descriptionAr" class="form-label"
-            >Description (Arabic)</label
-          >
-          <textarea
-            class="form-control"
-            id="descriptionAr"
-            rows="3"
-            required
-          ></textarea>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="subDescriptionEn" class="form-label"
+              >Sub Description (English)</label
+            >
+            <textarea
+              class="form-control"
+              id="subDescriptionEn"
+              rows="3"
+              formControlName="subDescriptionEn"
+            ></textarea>
+          </div>
+          <div class="col-md-6">
+            <label for="subDescriptionAr" class="form-label"
+              >Sub Description (Arabic)</label
+            >
+            <textarea
+              class="form-control"
+              id="subDescriptionAr"
+              rows="3"
+              formControlName="subDescriptionAr"
+            ></textarea>
+          </div>
         </div>
         <div class="mb-3">
           <label for="phone" class="form-label">Phone</label>
-          <input type="tel" class="form-control" id="phone" required />
+          <input
+            type="number"
+            class="form-control"
+            id="phone"
+            formControlName="phone"
+          />
         </div>
       </div>
     </div>
@@ -61,35 +88,65 @@
     <!-- Location -->
     <div class="card mb-4">
       <div class="card-header main-color-bg text-white">Location</div>
-      <div class="card-body">
+      <div class="card-body" formGroupName="location">
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="addressEn" class="form-label">Address (English)</label>
-            <input type="text" class="form-control" id="addressEn" required />
+            <input
+              type="text"
+              class="form-control"
+              id="addressEn"
+              formControlName="addressEn"
+            />
           </div>
           <div class="col-md-6 mb-3">
             <label for="addressAr" class="form-label">Address (Arabic)</label>
-            <input type="text" class="form-control" id="addressAr" required />
+            <input
+              type="text"
+              class="form-control"
+              id="addressAr"
+              formControlName="addressAr"
+            />
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="cityEn" class="form-label">City (English)</label>
-            <input type="text" class="form-control" id="cityEn" required />
+            <input
+              type="text"
+              class="form-control"
+              id="cityEn"
+              formControlName="cityEn"
+            />
           </div>
           <div class="col-md-6 mb-3">
             <label for="cityAr" class="form-label">City (Arabic)</label>
-            <input type="text" class="form-control" id="cityAr" required />
+            <input
+              type="text"
+              class="form-control"
+              id="cityAr"
+              formControlName="cityAr"
+            />
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="countryEn" class="form-label">Country (English)</label>
-            <input type="text" class="form-control" id="countryEn" required />
+            <input
+              type="text"
+              class="form-control"
+              id="countryEn"
+              formControlName="countryEn"
+            />
           </div>
           <div class="col-md-6 mb-3">
             <label for="countryAr" class="form-label">Country (Arabic)</label>
-            <input type="text" class="form-control" id="countryAr" required />
+            <input
+              type="text"
+              class="form-control"
+              id="countryAr"
+              formControlName="countryAr"
+            />
           </div>
         </div>
       </div>
@@ -98,23 +155,38 @@
     <!-- House Rules -->
     <div class="card mb-4">
       <div class="card-header main-color-bg text-white">House Rules</div>
-      <div class="card-body">
+      <div class="card-body" formGroupName="houseRules">
         <div class="row">
           <div class="col-md-4 mb-3">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="noSmoking" />
+              <input
+                class="form-check-input border-black"
+                type="checkbox"
+                id="noSmoking"
+                formControlName="noSmoking"
+              />
               <label class="form-check-label" for="noSmoking">No Smoking</label>
             </div>
           </div>
           <div class="col-md-4 mb-3">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="noPets" />
+              <input
+                class="form-check-input border-black"
+                type="checkbox"
+                id="noPets"
+                formControlName="noPets"
+              />
               <label class="form-check-label" for="noPets">No Pets</label>
             </div>
           </div>
           <div class="col-md-4 mb-3">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="noParties" />
+              <input
+                class="form-check-input border-black"
+                type="checkbox"
+                id="noParties"
+                formControlName="noParties"
+              />
               <label class="form-check-label" for="noParties">No Parties</label>
             </div>
           </div>
@@ -122,7 +194,12 @@
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="checkInTime" class="form-label">Check-in Time</label>
-            <input type="time" class="form-control" id="checkInTime" required />
+            <input
+              type="time"
+              class="form-control"
+              id="checkInTime"
+              formControlName="checkInTime"
+            />
           </div>
           <div class="col-md-6 mb-3">
             <label for="checkOutTime" class="form-label">Check-out Time</label>
@@ -130,7 +207,7 @@
               type="time"
               class="form-control"
               id="checkOutTime"
-              required
+              formControlName="checkOutTime"
             />
           </div>
         </div>
@@ -140,47 +217,116 @@
             type="number"
             class="form-control"
             id="pricePerNight"
-            required
+            formControlName="pricePerNight"
           />
         </div>
-      </div>
-    </div>
-
-    <!-- Facilities -->
-    <div class="card mb-4">
-      <div class="card-header main-color-bg text-white">Facilities</div>
-      <div class="card-body">
+        <h6 class="fw-medium">Cancellation</h6>
         <div class="row">
-          <div class="col-md-4 mb-2">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="wifi" />
-              <label class="form-check-label" for="wifi">WiFi</label>
-            </div>
+          <div class="col-md-6 mb-3">
+            <label for="cancellationPolicy" class="form-label">
+              Cancellation Policy (English)
+            </label>
+            <textarea
+              class="form-control"
+              id="cancellationPolicy"
+              rows="3"
+              formControlName="cancellationPolicyEn"
+            ></textarea>
           </div>
-          <div class="col-md-4 mb-2">
+          <div class="col-md-6 mb-3">
+            <label for="cancellationPolicyAr" class="form-label">
+              Cancellation Policy (Arabic)
+            </label>
+            <textarea
+              class="form-control"
+              id="cancellationPolicyAr"
+              rows="3"
+              formControlName="cancellationPolicyAr"
+            ></textarea>
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-md-6 mb-3">
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input border-black"
                 type="checkbox"
-                id="airConditioning"
+                id="refundable"
+                formControlName="isRefundable"
               />
-              <label class="form-check-label" for="airConditioning"
-                >Air Conditioning</label
+              <label class="form-check-label" for="refundable"
+                >Money is Refundable</label
               >
             </div>
           </div>
-          <div class="col-md-4 mb-2">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="parking" />
-              <label class="form-check-label" for="parking">Parking</label>
-            </div>
+          <div class="col-md-6 mb-3">
+            <label for="deadlineDays" class="form-label">Deadline Days</label>
+            <input
+              type="number"
+              class="form-control"
+              id="deadlineDays"
+              formControlName="deadlineDays"
+            />
           </div>
-          <!-- Add more facilities checkboxes as needed -->
+        </div>
+      </div>
+    </div>
+    <!-- New Photo Upload Section -->
+    <div class="card mb-4">
+      <div class="card-header main-color-bg text-white">Photo Upload</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="photoUpload" class="form-label"
+            >Upload Hotel Photos</label
+          >
+          <input
+            type="file"
+            class="form-control"
+            id="photoUpload"
+            (change)="onFileSelected($event)"
+            multiple
+            accept="image/*"
+          />
+        </div>
+        <div *ngIf="selectedFiles.length > 0" class="mt-3">
+          <p>Selected Files:</p>
+          <ul>
+            <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <button type="submit" class="btn main-color-bg-hover text-white">
+    <div class="card mb-4">
+      <div class="card-header main-color-bg text-white">Amenities</div>
+      <div class="card-body" formGroupName="amenities">
+        <ng-container *ngFor="let amenityGroup of amenityGroups">
+          <div [formGroupName]="amenityGroup.name">
+            <h5>{{ amenityGroup.title }}</h5>
+            <div class="row">
+              <div
+                class="col-md-4 mb-3"
+                *ngFor="let amenity of amenityGroup.amenities"
+              >
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [formControlName]="amenity"
+                  />
+                  <label class="form-check-label">{{ amenity }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="hotelForm.invalid || isLoading"
+    >
       Submit
     </button>
   </form>
