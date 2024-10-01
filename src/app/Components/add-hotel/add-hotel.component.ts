@@ -41,7 +41,6 @@ export class AddHotelComponent {
   ngOnInit() {
     this.initForm();
   }
-
   initForm() {
     this.hotelForm = this.fb.group({
       name: this.fb.group({
@@ -105,8 +104,17 @@ export class AddHotelComponent {
     });
   }
 
-  onFileSelect(event: any) {
-    this.selectedFiles = Array.from(event.target.files);
+  onFileSelect(event: Event) {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      this.selectedFiles = [...this.selectedFiles, ...Array.from(fileList)];
+      this.hotelForm.patchValue({ images: this.selectedFiles });
+    }
+  }
+
+  removeFile(index: number) {
+    this.selectedFiles.splice(index, 1);
     this.hotelForm.patchValue({ images: this.selectedFiles });
   }
 
