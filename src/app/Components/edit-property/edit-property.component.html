@@ -1,1 +1,11 @@
-<p>edit-property works!</p>
+<div *ngIf="hotels.length > 0; else noHotels">
+  <div *ngFor="let hotel of hotels">
+    <h3>{{ hotel.name }}</h3>
+    <p>{{ hotel.location }}</p> 
+  </div>
+</div>
+
+<ng-template #noHotels>
+  <p>No hotels found for this user.</p>
+</ng-template>
+

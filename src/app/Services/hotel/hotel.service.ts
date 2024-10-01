@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, from } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
@@ -32,6 +32,16 @@ export class HotelService {
         });
       })
     );
+  }
+
+  getUserHotels(userId: string): Observable<any> {
+    console.log("Fetching hotels for user:", userId);
+    return this.http.get(`${this.apiUrl}/host/owner/${userId}`, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming token is needed
+      }),
+    });
   }
 
   uploadImage(file: File): Observable<string> {
