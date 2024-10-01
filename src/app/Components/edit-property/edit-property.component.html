@@ -1,1 +1,7 @@
-<p>edit-property works!</p>
+<button (click)="getHotel()">Fetch Hotels</button>
+<div *ngFor="let hotel of hotels">
+  <p>ID: {{ hotel.id }}</p>
+  <p>Name: {{ hotel.name }}</p>
+  <!-- Add other relevant hotel properties to display here -->
+</div>
+
