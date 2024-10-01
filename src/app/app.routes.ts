@@ -9,6 +9,7 @@ import { AddHotelComponent } from './Components/add-hotel/add-hotel.component';
 import { AddApartmentComponent } from './Components/add-apartment/add-apartment.component';
 import { MainlayoutComponent } from './Components/mainlayout/mainlayout.component';
 import { userauthGuard } from './Guards/userauth.guard';
+import { AmenitiesComponent } from './Components/amenities/amenities.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,11 @@ export const routes: Routes = [
       {
         path: 'add-property/hotel',
         component: AddHotelComponent,
+        canActivate: [userauthGuard],
+      },
+      {
+        path: 'add-property/amenities/:id',
+        component: AmenitiesComponent,
         canActivate: [userauthGuard],
       },
       {

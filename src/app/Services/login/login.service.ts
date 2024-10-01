@@ -32,4 +32,8 @@ export class LoginService {
   getUserStatus() {
     return this.userLog.asObservable;
   }
+  logout() {
+    localStorage.removeItem('token');
+    this.userLog.next(false);
+  }
 }

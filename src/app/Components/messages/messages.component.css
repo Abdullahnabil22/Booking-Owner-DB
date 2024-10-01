@@ -16,6 +16,10 @@
   padding: 20px;
   z-index: 7;
 }
+.input-search {
+  border-radius: 0.55rem;
+  margin-left: -10px !important;
+}
 
 .chat-app .chat {
   margin-left: 280px;
@@ -38,6 +42,7 @@
 .people-list .chat-list li:hover {
   background: #efefef;
   cursor: pointer;
+  border-radius: 0.55rem;
 }
 
 .people-list .chat-list li.active {

@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { LoginService } from '../../Services/login/login.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -22,4 +23,15 @@ import { CommonModule } from '@angular/common';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+  constructor(private loginService: LoginService) {}
+  get isUserLoggedIn(): boolean {
+    return this.loginService.isUserLoggedIn;
+  }
+  getUserStatus() {
+    return this.loginService.getUserStatus();
+  }
+  logout() {
+    this.loginService.logout();
+  }
+}
