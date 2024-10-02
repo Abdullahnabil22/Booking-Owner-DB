@@ -2,6 +2,58 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HotelService } from '../../Services/hotel/hotel.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
+import { Router } from '@angular/router'; // Ensure Router is imported
+
+export interface Hotel {
+  _id: string; 
+  ownerId: string;
+  name: {
+    en: string; 
+    ar: string; 
+  };
+  subDescription: {
+    en: string;
+    ar: string; 
+  };
+  description: {
+    en: string;
+    ar: string; 
+  };
+  location: {
+    Address: {
+      en: string; 
+      ar: string; 
+    };
+    city: {
+      en: string; 
+      ar: string; 
+    };
+    country: {
+      en: string; 
+      ar: string; 
+    };
+  };
+  images: string[]; 
+  AverageRating: number; 
+  ReviewCount: number; 
+  approved: boolean;
+  PricePerNight: number;
+  CheckInTime: string; 
+  CheckOutTime: string; 
+  HouseRules: {
+    NoParties: boolean; 
+    NoPets: boolean; 
+    NoSmoking: boolean;
+    Cancellation: {
+      Policy: object; 
+      Refundable: boolean; 
+      DeadlineDays: number; 
+    };
+  };
+  phone: string | number; 
+  CreatedAt: string;
+  UpdatedAt: string; 
+}
 
 @Component({
   selector: 'app-edit-property',
@@ -11,10 +63,11 @@ import { JWTService } from '../../Services/JWT/jwt.service';
   styleUrls: ['./edit-property.component.css']
 })
 export class EditPropertyComponent implements OnInit {
-  hotels: any[] = [];
-  userId: string | null = null; 
+  hotels: Hotel[] = [];
+  userId: string | null = null;
 
-  constructor(private hotelService: HotelService, private jwtService: JWTService) {}
+
+  constructor(private hotelService: HotelService, private jwtService: JWTService, private router: Router) {}
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
@@ -27,7 +80,7 @@ export class EditPropertyComponent implements OnInit {
 
       if (this.userId) {
         this.hotelService.getUserHotels(this.userId).subscribe(
-          (data) => {
+          (data: Hotel[]) => {
             this.hotels = data;
             console.log('Fetched hotels:', this.hotels); 
           },
@@ -42,4 +95,26 @@ export class EditPropertyComponent implements OnInit {
       console.error('Token not found.');
     }
   }
+
+
+  onUpdateHotel(hotelid: string) {
+    this.router.navigate(['/add-property/hotel', hotelid]); 
+
+}
+onDeleteHotel(hottelId: string): void {
+  console.log(hottelId),
+
+  this.hotelService.deleteHotelById(hottelId).subscribe({
+
+    next: () => {
+      console.log('hotel deleted successfully');
+     
+    },
+    error: (err) => {
+      console.error('Error deleting hotel:', err);
+    }
+  });
+ 
+}
+
 }
