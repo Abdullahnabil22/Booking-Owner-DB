@@ -1,0 +1,226 @@
+<form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+  <div formArrayName="roomTypes">
+    <div
+      *ngFor="let roomType of roomTypes.controls; let i = index"
+      [formGroupName]="i"
+      class="card mb-4"
+    >
+      <div class="card-header main-color-bg text-white">
+        Room Type {{ i + 1 }}
+      </div>
+      <div class="card-body">
+        <div formGroupName="name" class="mb-3">
+          <label class="form-label">Name</label>
+          <div class="row">
+            <div class="col">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="en"
+                placeholder="English"
+              />
+            </div>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="ar"
+                placeholder="Arabic"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div formGroupName="description" class="mb-3">
+          <label class="form-label">Description</label>
+          <div class="row">
+            <div class="col">
+              <textarea
+                class="form-control"
+                formControlName="en"
+                placeholder="English"
+              ></textarea>
+            </div>
+            <div class="col">
+              <textarea
+                class="form-control"
+                formControlName="ar"
+                placeholder="Arabic"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div formGroupName="subDescription" class="mb-3">
+          <label class="form-label">Sub Description</label>
+          <div class="row">
+            <div class="col">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="en"
+                placeholder="English"
+              />
+            </div>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="ar"
+                placeholder="Arabic"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="price">Price</label>
+          <input
+            type="number"
+            formControlName="price"
+            class="form-control"
+            id="price"
+            required
+          />
+        </div>
+
+        <div formGroupName="roomType" class="mb-3">
+          <label for="roomType-{{ i }}" class="form-label">Room Type</label>
+          <select
+            id="roomType-{{ i }}"
+            class="form-select"
+            (change)="onRoomTypeChange($event, i)"
+            formControlName="en"
+          >
+            <option value="">Select Room Type</option>
+            <option *ngFor="let option of roomTypeOptions" [value]="option.en">
+              {{ option.en }} / {{ option.ar }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3" formGroupName="beds">
+          <h4>Beds</h4>
+          <div class="row">
+            <div class="col">
+              <label for="KingBed">King Beds</label>
+              <input
+                type="number"
+                formControlName="KingBed"
+                class="form-control"
+                id="KingBed"
+                required
+              />
+            </div>
+            <div class="col">
+              <label for="QueenBed">Queen Beds</label>
+              <input
+                type="number"
+                formControlName="QueenBed"
+                class="form-control"
+                id="QueenBed"
+                required
+              />
+            </div>
+            <div class="col">
+              <label for="TwinBed">Twin Beds</label>
+              <input
+                type="number"
+                formControlName="TwinBed"
+                class="form-control"
+                id="TwinBed"
+                required
+              />
+            </div>
+            <div class="col">
+              <label for="SofaBed">Sofa Beds</label>
+              <input
+                type="number"
+                formControlName="SofaBed"
+                class="form-control"
+                id="SofaBed"
+                required
+              />
+            </div>
+            <div class="col">
+              <label for="SingleBed">Single Beds</label>
+              <input
+                type="number"
+                formControlName="SingleBed"
+                class="form-control"
+                id="SingleBed"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Number of Rooms With This Type</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="numberOfRoomsWithThisType"
+          />
+        </div>
+
+        <div *ngFor="let benefitGroup of benefitGroups" class="card mb-3">
+          <div class="card-header main-color-bg text-white">
+            {{ benefitGroup.title }}
+          </div>
+          <div class="card-body" [formGroupName]="'benefits'">
+            <div class="row">
+              <div
+                *ngFor="let benefit of benefitGroup.benefits"
+                class="col-md-4 mb-2"
+              >
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [formControlName]="camelCase(benefit)"
+                    [id]="'benefit_' + i + '_' + camelCase(benefit)"
+                  />
+                  <label
+                    class="form-check-label"
+                    [for]="'benefit_' + i + '_' + camelCase(benefit)"
+                  >
+                    {{ benefit }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-check mb-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            formControlName="available"
+            id="available{{ i }}"
+          />
+          <label class="form-check-label" for="available{{ i }}">
+            Available
+          </label>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="removeRoomType(i)"
+          [disabled]="roomTypes.length === 1"
+        >
+          Remove Room Type
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="btn main-color-bg-hover text-white me-3"
+    (click)="addRoomType()"
+  >
+    Add Another Room Type
+  </button>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

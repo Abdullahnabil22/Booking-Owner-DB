@@ -10,6 +10,7 @@ import { AddApartmentComponent } from './Components/add-apartment/add-apartment.
 import { MainlayoutComponent } from './Components/mainlayout/mainlayout.component';
 import { userauthGuard } from './Guards/userauth.guard';
 import { AmenitiesComponent } from './Components/amenities/amenities.component';
+import { AddRoomComponent } from './Components/add-room/add-room.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,11 @@ export const routes: Routes = [
       {
         path: 'add-property/amenities/:id',
         component: AmenitiesComponent,
+        canActivate: [userauthGuard],
+      },
+      {
+        path: 'add-property/room/:id',
+        component: AddRoomComponent,
         canActivate: [userauthGuard],
       },
       {
