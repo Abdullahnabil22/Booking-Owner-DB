@@ -36,13 +36,36 @@ export class HotelService {
 
   getUserHotels(userId: string): Observable<any> {
     console.log("Fetching hotels for user:", userId);
-    return this.http.get(`${this.apiUrl}/host/owner/${userId}`, {
+  const hamada= this.http.get(`${this.apiUrl}/host/owner/${userId}`, {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming token is needed
+   
+        Authorization: ` ${localStorage.getItem('token')}`,
       }),
     });
+    console.log("hamada hotel",hamada)
+    return hamada;
   }
+  //////////////// getHotelById
+  // getHotelById(hotelId: string): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/host/${hotelId}`, {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${localStorage.getItem('token')}`
+  //     })
+  //   });
+  // }
+
+  /////////////////////// delethotelbyid
+  deleteHotelById(hotelId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/host/${hotelId}`, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      })
+    });
+  }
+  
+  
+  
+  
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();

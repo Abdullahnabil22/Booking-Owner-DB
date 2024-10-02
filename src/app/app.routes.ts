@@ -50,6 +50,11 @@ export const routes: Routes = [
         component: MessagesComponent,
         canActivate: [userauthGuard],
       },
+      {
+        path: 'add-property/hotel/:id',
+        component: AddHotelComponent,
+        canActivate: [userauthGuard],
+    }
     ],
   },
   { path: 'login', component: LoginComponent },

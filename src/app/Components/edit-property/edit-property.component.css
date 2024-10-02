@@ -1,0 +1,20 @@
+/* src/app/components/edit-property/edit-property.component.css */
+.hotel-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .hotel-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .hotel-image {
+    width: 30%;
+    height: auto;
+    border-radius: 8px;
+  }
+  

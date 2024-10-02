@@ -133,6 +133,9 @@ export class AddHotelComponent implements OnInit {
     this.addAmenityGroups();
   }
 
+  updateProd:number=0
+ 
+
   addAmenityGroups() {
     const amenitiesGroup = this.hotelForm.get('amenities') as FormGroup;
 
