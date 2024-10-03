@@ -90,14 +90,14 @@ export class AddHotelComponent {
         NoParties: [false, Validators.required],
         CheckInTime: ['', Validators.required],
         CheckOutTime: ['', Validators.required],
-        PricePerNight: ['', [Validators.required, Validators.min(0)]],
+        PricePerNight: ['', [Validators.required, Validators.min(1)]],
         Cancellation: this.fb.group({
           Policy: this.fb.group({
             en: [''],
             ar: [''],
           }),
           Refundable: [false],
-          DeadlineDays: [''],
+          DeadlineDays: ['', [Validators.required, Validators.min(0)]],
         }),
       }),
       images: [[], Validators.required],

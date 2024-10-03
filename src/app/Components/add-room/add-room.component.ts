@@ -72,15 +72,15 @@ export class AddRoomComponent {
         ar: ['', Validators.required],
       }),
       beds: this.fb.group({
-        KingBed: [0, Validators.required],
-        QueenBed: [0, Validators.required],
-        TwinBed: [0, Validators.required],
-        SofaBed: [0, Validators.required],
-        SingleBed: [0, Validators.required],
+        KingBed: [0, [Validators.required, Validators.min(0)]],
+        QueenBed: [0, [Validators.required, Validators.min(0)]],
+        TwinBed: [0, [Validators.required, Validators.min(0)]],
+        SofaBed: [0, [Validators.required, Validators.min(0)]],
+        SingleBed: [0, [Validators.required, Validators.min(0)]],
       }),
       numberOfRoomsWithThisType: [1, [Validators.required, Validators.min(1)]],
       benefits: this.createBenefitsFormGroup(),
-      price: [0, [Validators.required, Validators.min(0)]],
+      price: [0, [Validators.required, Validators.min(1)]],
       available: [true],
     });
 
