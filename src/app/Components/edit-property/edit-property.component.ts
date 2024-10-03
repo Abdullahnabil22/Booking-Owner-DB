@@ -1,65 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Hotel } from '../../model/hotel';
 import { HotelService } from '../../Services/hotel/hotel.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
 import { Router } from '@angular/router'; // Ensure Router is imported
 
-export interface Hotel {
-  _id: string; 
-  ownerId: string;
-  name: {
-    en: string; 
-    ar: string; 
-  };
-  subDescription: {
-    en: string;
-    ar: string; 
-  };
-  description: {
-    en: string;
-    ar: string; 
-  };
-  location: {
-    Address: {
-      en: string; 
-      ar: string; 
-    };
-    city: {
-      en: string; 
-      ar: string; 
-    };
-    country: {
-      en: string; 
-      ar: string; 
-    };
-  };
-  images: string[]; 
-  AverageRating: number; 
-  ReviewCount: number; 
-  approved: boolean;
-  PricePerNight: number;
-  CheckInTime: string; 
-  CheckOutTime: string; 
-  HouseRules: {
-    NoParties: boolean; 
-    NoPets: boolean; 
-    NoSmoking: boolean;
-    Cancellation: {
-      Policy: object; 
-      Refundable: boolean; 
-      DeadlineDays: number; 
-    };
-  };
-  phone: string | number; 
-  CreatedAt: string;
-  UpdatedAt: string; 
-}
+
 
 @Component({
   selector: 'app-edit-property',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './edit-property.component.html',
+templateUrl: './edit-property.component.html',
   styleUrls: ['./edit-property.component.css']
 })
 export class EditPropertyComponent implements OnInit {
@@ -98,7 +50,7 @@ export class EditPropertyComponent implements OnInit {
 
 
   onUpdateHotel(hotelid: string) {
-    this.router.navigate(['/add-property/hotel', hotelid]); 
+    this.router.navigate(['/edit-Hotel', hotelid]); 
 
 }
 onDeleteHotel(hottelId: string): void {

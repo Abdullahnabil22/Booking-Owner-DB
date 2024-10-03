@@ -1,0 +1,12 @@
+<form (ngSubmit)="updateHotel(hotel)">
+  <div class="mb-3">
+    <label for="name" class="form-label">Name Product</label>
+    <input type="text" class="form-control" id="name" [(ngModel)]="hotel.name.en" name="name">
+    <div id="name" class="form-text">Name</div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+  
+  <!-- <h1>{{ hotel | json }}</h1> Correctly display the hotel object -->
+  

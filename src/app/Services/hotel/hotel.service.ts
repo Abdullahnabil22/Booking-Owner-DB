@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { Hotel } from '../../model/hotel';
+
 
 @Injectable({
   providedIn: 'root',
@@ -62,9 +64,29 @@ export class HotelService {
       })
     });
   }
-  
-  
-  
+ 
+/////////////////////////// update
+
+updateHotel(updatedHotel: Hotel): Observable<Hotel> {
+  return this.http.patch<Hotel>(
+    `${this.apiUrl}/host/${updatedHotel._id}`, 
+    updatedHotel, 
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      })
+    }
+  );
+}
+
+// Service for getting a hotel by ID
+getHotelById(hotelId: string): Observable<any> {
+  console.log("hamadaid",hotelId)
+ const resulat= this.http.get(`${this.apiUrl}/host/${hotelId}`);
+ console.log("result",resulat)
+ return resulat
+}
   
 
   uploadImage(file: File): Observable<string> {
