@@ -1,0 +1,101 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { Observable } from 'rxjs';
+Chart.register(...registerables);
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ChartsService {
+  constructor(private http: HttpClient) {}
+
+  getEarningsData(ownerId: string): Observable<any> {
+    return this.http.get<any>(`http://localhost:3000/earnings/${ownerId}`);
+  }
+
+  createChart(ctx: HTMLCanvasElement, data: any): Chart {
+    const labels = this.getUniqueLabels(
+      data.apartmentBookings,
+      data.hostBookings
+    );
+    const apartmentData = this.formatChartData(data.apartmentBookings, labels);
+    const hostData = this.formatChartData(data.hostBookings, labels);
+
+    console.log('Processed Chart Data:', {
+      labels,
+      apartmentData,
+      hostData,
+    });
+
+    const chartConfig: ChartConfiguration = {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Apartment Earnings',
+            data: apartmentData,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            tension: 0.1,
+            fill: true,
+          },
+          {
+            label: 'Host Earnings',
+            data: hostData,
+            borderColor: 'rgba(26, 76, 243, 1)',
+            backgroundColor: 'rgba(26, 76, 243, 0.2)',
+            tension: 0.1,
+            fill: true,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 10000,
+            title: {
+              display: true,
+              text: 'Earnings ($)',
+            },
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Month',
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: false,
+            text: 'Earnings Overview',
+          },
+        },
+      },
+    };
+
+    return new Chart(ctx, chartConfig);
+  }
+  private getUniqueLabels(...datasets: any[]): string[] {
+    const allLabels = datasets.flatMap((dataset) =>
+      dataset.map((item: any) => item._id)
+    );
+    const uniqueLabels = [...new Set(allLabels)].sort();
+    console.log('Unique labels:', uniqueLabels);
+    return uniqueLabels;
+  }
+
+  private formatChartData(data: any[], labels: string[]): number[] {
+    return labels.map((label) => {
+      const matchingItem = data.find((item) => item._id === label);
+      return matchingItem ? matchingItem.totalEarnings : 0;
+    });
+  }
+}
