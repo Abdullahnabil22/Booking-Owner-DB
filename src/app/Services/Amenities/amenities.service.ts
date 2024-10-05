@@ -5,12 +5,13 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AmenitiesService {
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
