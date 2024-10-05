@@ -1,36 +1,89 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { LocalStorageService } from '../localstorage/localstorage.service';
+
 import { JWTService } from '../JWT/jwt.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MessageService {
-  private userId: string = '';
-  private apiUrl = `${environment.apiUrl}/messages/${this.userId}`;
+  private apiUrl = `${environment.apiUrl}/messages`;
 
-  constructor(
-    private http: HttpClient,
-    private localStorageService: LocalStorageService,
-    private jwtService: JWTService
-  ) {}
+  constructor(private http: HttpClient, private jwtService: JWTService) {}
 
   private getHeaders(): HttpHeaders {
-    const token = this.localStorageService.getItem('token');
-    if (token) {
-      this.userId = this.jwtService.decodeToken(token).userId;
-    }
+    const token = localStorage.getItem('token');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     });
   }
 
+  private getOwnerId(): string {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.jwtService.decodeToken(token);
+      return decodedToken.id;
+    }
+    throw new Error('No token found');
+  }
+
   getMessages(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl, { headers: this.getHeaders() });
+    return this.http
+      .get<any[]>(`${this.apiUrl}/${this.getOwnerId()}`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(map((messages) => this.processMessages(messages)));
+  }
+
+  private processMessages(messages: any[]): any[] {
+    const groupedMessages: { [key: string]: any } = {};
+    messages.forEach((message) => {
+      let groupKey: string;
+      let groupInfo: any;
+
+      if (message.hostId) {
+        groupKey = message.hostId._id || 'unknown';
+        groupInfo = {
+          type: 'host',
+          id: groupKey,
+          name: message.hostId.name || 'Unknown Host',
+        };
+      } else if (message.apartmentId) {
+        groupKey = message.apartmentId._id || 'unknown';
+        groupInfo = {
+          type: 'apartment',
+          id: groupKey,
+          name: message.apartmentId.name?.en || 'Unknown Apartment',
+        };
+      } else {
+        groupKey = 'unknown';
+        groupInfo = {
+          type: 'unknown',
+          id: 'unknown',
+          name: 'Unknown',
+        };
+      }
+
+      if (!groupedMessages[groupKey]) {
+        groupedMessages[groupKey] = {
+          ...groupInfo,
+          messages: [],
+        };
+      }
+
+      groupedMessages[groupKey].messages.push({
+        id: message._id,
+        sender: message.sender,
+        receiver: message.receiver,
+        content: message.content,
+        timestamp: message.timestamp,
+        read: message.read,
+      });
+    });
+    return Object.values(groupedMessages);
   }
 
   sendMessage(message: any): Observable<any> {

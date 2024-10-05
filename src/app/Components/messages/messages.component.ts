@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../../Services/messages/messages.service';
 import { LoginService } from '../../Services/login/login.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
-import { LocalStorageService } from '../../Services/localstorage/localstorage.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -14,35 +13,40 @@ import { CommonModule } from '@angular/common';
   styleUrl: './messages.component.css',
 })
 export class MessagesComponent {
-  messages: any[] = [];
+  chats: any[] = [];
   newMessage: string = '';
   selectedChat: any = null;
   currentUserId: string = '';
+  currentUserName: string = '';
 
   constructor(
     private messageService: MessageService,
     private loginService: LoginService,
-    private jwtService: JWTService,
-    private localStorageService: LocalStorageService
+    private jwtService: JWTService
   ) {}
 
   ngOnInit() {
-    this.getCurrentUserId();
+    this.getCurrentUserInfo();
     this.loadMessages();
   }
 
-  getCurrentUserId() {
-    const token = this.localStorageService.getItem('token');
+  getCurrentUserInfo() {
+    const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = this.jwtService.decodeToken(token);
-      this.currentUserId = decodedToken.userId;
+      this.currentUserId = decodedToken.id;
+      this.currentUserName = decodedToken.username || 'Unknown User';
     }
   }
 
   loadMessages() {
     this.messageService.getMessages().subscribe(
-      (messages) => {
-        this.messages = this.groupMessagesByProperty(messages);
+      (groupedMessages) => {
+        this.chats = groupedMessages;
+        console.log('Grouped messages:', this.chats);
+        this.chats.forEach((chat) =>
+          console.log('First message sender:', chat.messages[0]?.sender)
+        );
       },
       (error) => {
         console.error('Error loading messages:', error);
@@ -50,49 +54,48 @@ export class MessagesComponent {
     );
   }
 
-  groupMessagesByProperty(messages: any[]) {
-    const groupedMessages: { [key: string]: any } = {};
-    messages.forEach((message) => {
-      if (message && message.apartmentId && message.hostId) {
-        const key = `${message.apartmentId._id || message.apartmentId}-${
-          message.hostId._id || message.hostId
-        }`;
-        if (!groupedMessages[key]) {
-          groupedMessages[key] = {
-            apartment: message.apartmentId,
-            host: message.hostId,
-            messages: [],
-          };
-        }
-        groupedMessages[key].messages.push(message);
-      } else {
-        console.warn('Invalid message structure:', message);
-      }
-    });
-    return Object.values(groupedMessages);
-  }
-
   selectChat(chat: any) {
     this.selectedChat = chat;
+    this.markMessagesAsRead(chat);
+  }
+
+  markMessagesAsRead(chat: any) {
+    chat.messages.forEach((message: any) => {
+      if (!message.read && message.sender.id !== this.currentUserId) {
+        this.messageService.markAsRead(message.id).subscribe(
+          () => {
+            message.read = true;
+          },
+          (error) => {
+            console.error('Error marking message as read:', error);
+          }
+        );
+      }
+    });
   }
 
   sendMessage() {
     if (this.newMessage.trim() && this.selectedChat) {
-      const receiverId = this.getReceiverId();
-      if (!receiverId) {
-        console.error('Unable to determine receiver ID');
-        return;
-      }
-
       const message = {
-        receiverId: receiverId,
-        apartmentId: this.selectedChat.apartment._id,
-        hostId: this.selectedChat.host._id,
+        senderId: this.currentUserId,
+        receiverId: this.getReceiverId(),
+        hostId: this.selectedChat.type === 'host' ? this.selectedChat.id : null,
+        apartmentId:
+          this.selectedChat.type === 'apartment' ? this.selectedChat.id : null,
         content: this.newMessage,
       };
 
+      console.log('Sending message:', message);
+      console.log('Selected chat:', this.selectedChat);
+
       this.messageService.sendMessage(message).subscribe(
         (response) => {
+          console.log('Message sent successfully:', response);
+          // Add the current user's name to the response before pushing it to the chat
+          response.sender = {
+            _id: this.currentUserId,
+            userName: this.currentUserName,
+          };
           this.selectedChat.messages.push(response);
           this.newMessage = '';
         },
@@ -100,10 +103,15 @@ export class MessagesComponent {
           console.error('Error sending message:', error);
         }
       );
+    } else {
+      console.log('Cannot send message: ', {
+        newMessage: this.newMessage,
+        selectedChat: this.selectedChat,
+      });
     }
   }
 
-  getReceiverId(): string | null {
+  getReceiverId(): string {
     if (
       this.selectedChat &&
       this.selectedChat.messages &&
@@ -116,7 +124,7 @@ export class MessagesComponent {
           : firstMessage.sender._id;
       }
     }
-    return null;
+    return this.selectedChat ? this.selectedChat.id : '';
   }
 
   isCurrentUser(senderId: string): boolean {
