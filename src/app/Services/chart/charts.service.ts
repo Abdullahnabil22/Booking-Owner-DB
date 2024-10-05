@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 Chart.register(...registerables);
 
 @Injectable({
@@ -11,7 +12,7 @@ export class ChartsService {
   constructor(private http: HttpClient) {}
 
   getEarningsData(ownerId: string): Observable<any> {
-    return this.http.get<any>(`http://localhost:3000/earnings/${ownerId}`);
+    return this.http.get<any>(`${environment.apiUrl}/earnings/${ownerId}`);
   }
 
   createChart(ctx: HTMLCanvasElement, data: any): Chart {

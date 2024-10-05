@@ -1,1 +1,41 @@
-<p>messages works!</p>
+<div class="chat-container">
+  <div class="chat-list">
+    <h2>Properties</h2>
+    <ul>
+      <li *ngFor="let chat of messages" (click)="selectChat(chat)">
+        {{ chat.apartment?.name?.en || "Unknown Apartment" }} -
+        {{ chat.host?.name?.en || "Unknown Host" }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="chat-messages" *ngIf="selectedChat">
+    <h2>
+      Chat for {{ selectedChat.apartment?.name?.en || "Unknown Apartment" }} -
+      {{ selectedChat.host?.name?.en || "Unknown Host" }}
+    </h2>
+
+    <div class="message-list">
+      <div
+        *ngFor="let message of selectedChat.messages"
+        [ngClass]="{
+          sent: isCurrentUser(message.sender?._id),
+          received: !isCurrentUser(message.sender?._id)
+        }"
+      >
+        <strong>{{ message.sender?.userName || "Unknown User" }}</strong
+        >: {{ message.content }}
+        <span class="small">{{ message.timestamp | date : "short" }}</span>
+      </div>
+    </div>
+
+    <div class="message-input">
+      <input
+        [(ngModel)]="newMessage"
+        (keyup.enter)="sendMessage()"
+        placeholder="Type a message..."
+      />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>

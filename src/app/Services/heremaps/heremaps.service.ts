@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 declare var H: any;
 
@@ -16,7 +17,7 @@ export class HeremapsService {
 
   private initHereMaps() {
     this.platform = new H.service.Platform({
-      apikey: 'uNtgciF23IIFHqniNSHiJ4C2LtiEpINZdlsG1hXT-Oc',
+      apikey: environment.hereApiKey,
     });
     this.searchService = this.platform.getSearchService();
   }

@@ -11,12 +11,18 @@ import { MainlayoutComponent } from './Components/mainlayout/mainlayout.componen
 import { userauthGuard } from './Guards/userauth.guard';
 import { AmenitiesComponent } from './Components/amenities/amenities.component';
 import { AddRoomComponent } from './Components/add-room/add-room.component';
+import { guestGuard } from './Guards/guest.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: MainlayoutComponent,
     children: [
+      {
+        path: '',
+        redirectTo: '/dashboard',
+        pathMatch: 'full',
+      },
       {
         path: 'dashboard',
         component: DashboardComponent,
@@ -64,6 +70,6 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
   { path: '**', redirectTo: '/dashboard' },
 ];
