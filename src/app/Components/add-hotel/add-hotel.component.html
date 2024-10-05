@@ -85,68 +85,56 @@
     </div>
 
     <div class="card mb-4">
-      <div class="card-header main-color-bg text-white">Location</div>
+      <div class="card-header main-color-bg text-white">
+        Location
+      </div>
+    
       <div class="card-body" formGroupName="location">
+        <div class="mb-3">
+          <label for="address-input">Address</label>
+          <input
+            id="address-input"
+            type="text"
+            class="form-control"
+            (input)="onAddressInput($event)"
+            [value]="addressInput"
+            placeholder="Start typing an address..."
+          >
+        </div>
+    
         <div class="row" formGroupName="Address">
           <div class="col-md-6 mb-3">
-            <label for="addressEn" class="form-label">Address (English)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="addressEn"
-              formControlName="en"
-            />
+            <label for="address-en">Address (English)</label>
+            <input id="address-en" type="text" class="form-control" formControlName="en" readonly>
           </div>
+    
           <div class="col-md-6 mb-3">
-            <label for="addressAr" class="form-label">Address (Arabic)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="addressAr"
-              formControlName="ar"
-            />
+            <label for="address-ar">Address (Arabic)</label>
+            <input id="address-ar" type="text" class="form-control" formControlName="ar" readonly>
           </div>
         </div>
-
+    
         <div class="row" formGroupName="city">
           <div class="col-md-6 mb-3">
-            <label for="cityEn" class="form-label">City (English)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="cityEn"
-              formControlName="en"
-            />
+            <label for="city-en">City (English)</label>
+            <input id="city-en" type="text" class="form-control" formControlName="en" readonly>
           </div>
+    
           <div class="col-md-6 mb-3">
-            <label for="cityAr" class="form-label">City (Arabic)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="cityAr"
-              formControlName="ar"
-            />
+            <label for="city-ar">City (Arabic)</label>
+            <input id="city-ar" type="text" class="form-control" formControlName="ar" readonly>
           </div>
         </div>
-
+    
         <div class="row" formGroupName="country">
           <div class="col-md-6 mb-3">
-            <label for="countryEn" class="form-label">Country (English)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="countryEn"
-              formControlName="en"
-            />
+            <label for="country-en">Country (English)</label>
+            <input id="country-en" type="text" class="form-control" formControlName="en" readonly>
           </div>
+    
           <div class="col-md-6 mb-3">
-            <label for="countryAr" class="form-label">Country (Arabic)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="countryAr"
-              formControlName="ar"
-            />
+            <label for="country-ar">Country (Arabic)</label>
+            <input id="country-ar" type="text" class="form-control" formControlName="ar" readonly>
           </div>
         </div>
       </div>

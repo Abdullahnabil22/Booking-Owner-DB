@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { HotelService } from '../../Services/hotel/hotel.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
+import { HeremapsService } from '../../Services/heremaps/heremaps.service';
 
 @Component({
   selector: 'app-add-hotel',
@@ -31,16 +32,20 @@ export class AddHotelComponent {
   hotelForm!: FormGroup;
   selectedFiles: File[] = [];
   errorMessage: string = '';
+  addressInput: string = '';
 
   constructor(
     private fb: FormBuilder,
     private hotelService: HotelService,
-    private router: Router
+    private hereMapsService: HeremapsService,
+    private router: Router,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
     this.initForm();
   }
+
   initForm() {
     this.hotelForm = this.fb.group({
       name: this.fb.group({
@@ -101,6 +106,49 @@ export class AddHotelComponent {
         }),
       }),
       images: [[], Validators.required],
+    });
+  }
+
+  onAddressInput(event: Event) {
+    const input = (event.target as HTMLInputElement).value;
+    this.addressInput = input;
+
+    if (input.length > 3) {
+      this.searchAddress(input);
+    }
+  }
+  searchAddress(query: string) {
+    this.hereMapsService.searchAddress(query).subscribe(
+      (location) => {
+        this.zone.run(() => {
+          this.updateFormWithAddress(location);
+        });
+      },
+      (error) => {
+        console.error('Error searching address:', error);
+      }
+    );
+  }
+
+  updateFormWithAddress(location: any) {
+    const addressEn = location.en.address;
+    const addressAr = location.ar.address;
+
+    this.hotelForm.patchValue({
+      location: {
+        Address: {
+          en: addressEn.label || '',
+          ar: addressAr.label || '',
+        },
+        city: {
+          en: addressEn.city || '',
+          ar: addressAr.city || '',
+        },
+        country: {
+          en: addressEn.countryName || '',
+          ar: addressAr.countryName || '',
+        },
+      },
     });
   }
 
