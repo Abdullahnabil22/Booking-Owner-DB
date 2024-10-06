@@ -130,9 +130,11 @@ export class AddHotelComponent {
     );
   }
 
+
   updateFormWithAddress(location: any) {
     const addressEn = location.en.address;
     const addressAr = location.ar.address;
+
 
     this.hotelForm.patchValue({
       location: {

@@ -1,0 +1,87 @@
+
+.hotel-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center align cards */
+  gap: 20px; /* Add spacing between hotel cards */
+  padding: 20px; /* Add padding around the card list */
+}
+
+.hotel-card {
+  background: #f8f9fa; /* Light background color for cards */
+  border-radius: 15px; /* Slightly more rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* More prominent shadow */
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 300px; /* Fixed width for cards */
+  flex: 1 1 45%; /* Allow cards to grow and shrink while taking up to 45% of the container */
+  max-width: 350px; /* Maximum width for cards */
+  text-align: center;
+}
+
+.hotel-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+}
+
+.hotel-image {
+  width: 100%;
+  height: 200px; /* Set a fixed height for images */
+  object-fit: cover; /* Ensure the image covers the area without distortion */
+}
+
+.hotel-details {
+  padding: 20px; /* More padding for better spacing */
+}
+
+h3 {
+  margin: 10px 0;
+  font-size: 1.5em; /* Adjust title font size */
+}
+
+.sub-description,
+.description {
+  color: #555;
+  font-size: 0.9em; /* Slightly smaller font size */
+  margin: 5px 0;
+}
+
+.price {
+  font-weight: bold;
+  color: #5BBAFF; /* Your preferred color */
+}
+
+.approval-status {
+  font-weight: bold;
+}
+
+.approved {
+  color: green;
+}
+
+.not-approved {
+  color: red;
+}
+
+.button-group {
+  margin-top: 15px; /* More space between text and buttons */
+}
+
+.btn {
+  margin: 5px; /* Spacing between buttons */
+  padding: 10px 20px; /* Button padding */
+  border-radius: 5px; /* Rounded corners for buttons */
+}
+
+.no-hotels-message {
+  text-align: center;
+  font-size: 1.2em;
+  color: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hotel-card {
+    flex: 1 1 90%; /* Take up to 90% of the width on smaller screens */
+  }
+}

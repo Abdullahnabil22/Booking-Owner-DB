@@ -1,0 +1,50 @@
+<form (ngSubmit)="updateHotel(hotel)" class="hotel-edit-form">
+  <div class="form-group mb-3">
+    <label for="name" class="form-label">Hotel Name</label>
+    <input type="text" class="form-control" id="name" [(ngModel)]="hotel.name.en" name="name" required>
+    <div id="nameHelp" class="form-text">Enter the name of the hotel.</div>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="subDescription" class="form-label">Sub Description</label>
+    <input type="text" class="form-control" id="subDescription" [(ngModel)]="hotel.subDescription.en" name="subDescription" required>
+    <div id="subDescriptionHelp" class="form-text">Enter a short description of the hotel.</div>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" id="description" [(ngModel)]="hotel.description.en" name="description" required></textarea>
+    <div id="descriptionHelp" class="form-text">Enter a detailed description of the hotel.</div>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="phone" class="form-label">Contact Number</label>
+    <input type="tel" class="form-control" id="phone" [(ngModel)]="hotel.phone" name="phone" required>
+    <div id="phoneHelp" class="form-text">Enter the contact number for the hotel.</div>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="checkInTime" class="form-label">Check-In Time</label>
+    <!-- <input type="time" class="form-control" id="checkInTime" [(ngModel)]="hotel.HouseRules.CheckInTime" name="checkInTime" required> -->
+    <div id="checkInTimeHelp" class="form-text">Enter the check-in time for the hotel.</div>
+    
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="cancellationPolicy" class="form-label">Cancellation Policy</label>
+    <input type="text" class="form-control" id="cancellationPolicy" [(ngModel)]="hotel.HouseRules.Cancellation" name="cancellationPolicy" required>
+    <div id="cancellationPolicyHelp" class="form-text">Enter the cancellation policy for the hotel.</div>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="approved" class="form-label">Approval Status</label>
+    <select class="form-control" id="approved" [(ngModel)]="hotel.approved" name="approved">
+      <option [ngValue]="true">Approved</option>
+      <option [ngValue]="false">Not Approved</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Update Hotel</button>
+</form>
+
+
