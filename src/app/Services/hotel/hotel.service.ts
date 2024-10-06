@@ -4,13 +4,9 @@ import { Injectable } from '@angular/core';
 import { JWTService } from '../JWT/jwt.service';
 import { environment } from '../../../environments/environment.development';
 
-import { Observable, forkJoin,  map, , switchMap } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { Hotel } from '../../model/hotel';
 import { tap, catchError } from 'rxjs/operators';
-import { error } from 'console';
-
-
 
 @Injectable({
   providedIn: 'root',
@@ -35,14 +31,13 @@ export class HotelService {
   }
 
   getUserHotels(userId: string): Observable<any> {
-    console.log("Fetching hotels for user:", userId);
-  const hamada= this.http.get(`${this.apiUrl}/host/owner/${userId}`, {
+    console.log('Fetching hotels for user:', userId);
+    const hamada = this.http.get(`${this.apiUrl}/host/owner/${userId}`, {
       headers: new HttpHeaders({
-   
         Authorization: ` ${localStorage.getItem('token')}`,
       }),
     });
-    console.log("hamada hotel",hamada)
+    console.log('hamada hotel', hamada);
     return hamada;
   }
   //////////////// getHotelById
@@ -58,44 +53,41 @@ export class HotelService {
   deleteHotelById(hotelId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/host/${hotelId}`, {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      })
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      }),
     });
   }
- 
-/////////////////////////// update
 
-updateHotel(updatedHotel: Hotel): Observable<Hotel> {
-  return this.http.patch<Hotel>(
-    `${this.apiUrl}/host/${updatedHotel._id}`, 
-    updatedHotel, 
-    {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      })
-    }
-  );
-}
+  /////////////////////////// update
 
+  updateHotel(updatedHotel: Hotel): Observable<Hotel> {
+    return this.http.patch<Hotel>(
+      `${this.apiUrl}/host/${updatedHotel._id}`,
+      updatedHotel,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }),
+      }
+    );
+  }
 
-// Service for getting a hotel by ID
-getHotelById(hotelId: string): Observable<any> {
-  console.log("hamadaid",hotelId)
- const resulat= this.http.get(`${this.apiUrl}/host/${hotelId}`);
- console.log("result",resulat)
- return resulat
-}
-///////////////////////// vistor
-getVisitors(hotelId: string): Observable<any[]> {
-  const url = `${this.apiUrl}/host/visitors/${hotelId}`;
-  console.log('Fetching visitors from:', url);
-  return this.http.get<any[]>(url).pipe(
-    tap(data => console.log('Fetched visitors:', data)),
-   
-  );
-}
-
+  // Service for getting a hotel by ID
+  getHotelById(hotelId: string): Observable<any> {
+    console.log('hamadaid', hotelId);
+    const resulat = this.http.get(`${this.apiUrl}/host/${hotelId}`);
+    console.log('result', resulat);
+    return resulat;
+  }
+  ///////////////////////// vistor
+  getVisitors(hotelId: string): Observable<any[]> {
+    const url = `${this.apiUrl}/host/visitors/${hotelId}`;
+    console.log('Fetching visitors from:', url);
+    return this.http
+      .get<any[]>(url)
+      .pipe(tap((data) => console.log('Fetched visitors:', data)));
+  }
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
