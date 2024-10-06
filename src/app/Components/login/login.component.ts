@@ -32,20 +32,20 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.loginService.login(this.email, this.password).subscribe(
       (response) => {
-        console.log('Response received:', response);
-        const decodedToken = this.jwtService.decodeToken(response.token);
-        if (response && response.token && decodedToken.role === 'owner') {
-          localStorage.setItem('token', response.token);
-          this.router.navigate(['/dashboard']);
-          this.isUserLoggedIn = true;
-        } else {
-          this.errorMessage = 'Access denied. You are not authorized.';
-          console.log('Invalid response structure:', response);
+        if (response && response.token) {
+          const decodedToken = this.jwtService.decodeToken(response.token);
+          if (decodedToken.role === 'owner') {
+            localStorage.setItem('token', response.token);
+            this.router.navigate(['/dashboard']);
+            this.isUserLoggedIn = true;
+          } else {
+            this.errorMessage = 'Access denied. You are not authorized.';
+            console.log('Invalid response structure:', response);
+          }
         }
       },
       (error) => {
-        this.errorMessage = 'Login failed. Please try again.';
-        console.error('Login error:', error);
+        this.errorMessage = 'Access denied.';
       }
     );
   }
