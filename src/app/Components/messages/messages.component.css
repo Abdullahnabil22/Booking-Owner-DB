@@ -1,41 +1,41 @@
-.chat-container {
+.cursor {
+  cursor: pointer;
+}
+.cursor:hover {
+  background-color: #ffb204 !important;
+  color: white;
+}
+.min-width {
+  min-width: 200px;
+}
+.user-name {
+  font-weight: 500;
+}
+.custom-chat-scroll {
+  overflow-y: auto !important;
+}
+.custom-chat-scroll::-webkit-scrollbar {
+  width: 10px !important;
+}
+.custom-chat-scroll::-webkit-scrollbar-thumb {
+  background-color: #bab9b9 !important;
+  border-radius: 10px !important;
+}
+.custom-chat-scroll::-webkit-scrollbar-track {
+  background-color: #e9e9e9 !important;
+}
+.circle {
+  min-width: 50px;
+  min-height: 50px;
+  border-radius: 50%;
+  background-color: #003b95;
+  color: white;
+  font-size: 20px;
   display: flex;
-  height: 500px;
-}
-
-.chat-list {
-  width: 30%;
-  border-right: 1px solid #ccc;
-  overflow-y: auto;
-}
-
-.chat-messages {
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-}
-
-.message-list {
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
-.message-input {
-  display: flex;
-  padding: 10px;
-}
-
-.message-input input {
-  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
   margin-right: 10px;
 }
-
-.sent {
-  text-align: right;
-  background-color: #e6f7ff;
-}
-
-.received {
-  text-align: left;
-  background-color: #f0f0f0;
+.primary-color {
+  background-color: #ffb204 !important;
 }

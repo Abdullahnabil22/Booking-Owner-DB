@@ -43,20 +43,23 @@ export class MessageService {
     messages.forEach((message) => {
       let groupKey: string;
       let groupInfo: any;
-
       if (message.hostId) {
         groupKey = message.hostId._id || 'unknown';
         groupInfo = {
-          type: 'host',
+          type: 'Hotel',
           id: groupKey,
           name: message.hostId.name || 'Unknown Host',
+          sender: message.sender.userName,
+          receiver: message.receiver.userName,
         };
       } else if (message.apartmentId) {
         groupKey = message.apartmentId._id || 'unknown';
         groupInfo = {
-          type: 'apartment',
+          type: 'Apartment',
           id: groupKey,
           name: message.apartmentId.name?.en || 'Unknown Apartment',
+          sender: message.sender.userName,
+          receiver: message.receiver.userName,
         };
       } else {
         groupKey = 'unknown';
@@ -66,6 +69,7 @@ export class MessageService {
           name: 'Unknown',
         };
       }
+      console.log(groupInfo);
 
       if (!groupedMessages[groupKey]) {
         groupedMessages[groupKey] = {
@@ -83,6 +87,7 @@ export class MessageService {
         read: message.read,
       });
     });
+
     return Object.values(groupedMessages);
   }
 

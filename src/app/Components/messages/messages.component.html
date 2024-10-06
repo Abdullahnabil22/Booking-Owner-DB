@@ -1,42 +1,97 @@
-<div class="chat-container">
-  <div class="chat-list">
-    <div
-      *ngFor="let chat of chats"
-      (click)="selectChat(chat)"
-      class="chat-item"
-    >
-      {{ chat.name }} ({{ chat.type | titlecase }})
-    </div>
-  </div>
-
-  <div *ngIf="selectedChat" class="chat-messages">
-    <h2>
-      Chat with {{ selectedChat.name }} ({{ selectedChat.type | titlecase }})
-    </h2>
-
-    <div class="message-list">
-      <div
-        *ngFor="let message of selectedChat.messages"
-        [ngClass]="{
-          sent: isCurrentUser(message.sender.id),
-          received: !isCurrentUser(message.sender.id),
-          unread: !message.read
-        }"
-        class="message"
-      >
-        <strong>{{ message.sender?.userName || "Unknown User" }}:</strong>
-        {{ message.content }}
-        <small>{{ message.timestamp | date : "short" }}</small>
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <!-- Chat list sidebar -->
+    <div class="col-md-3 col-lg-3 bg-light p-2 rounded-lg">
+      <div class="d-flex flex-column gap-2">
+        <div
+          *ngFor="let chat of chats"
+          (click)="selectChat(chat)"
+          class="bg-white rounded-3 p-4 cursor shadow-lg d-flex align-items-center"
+        >
+          <div class="circle">
+            <span>{{ chat.sender.charAt(0) }}</span>
+          </div>
+          <div class="d-flex flex-column">
+            <span>{{ chat.sender }} to {{ chat.name }}</span>
+            <small class="d-block">({{ chat.type | titlecase }})</small>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="message-input">
-      <input
-        [(ngModel)]="newMessage"
-        placeholder="Type your message..."
-        (keyup.enter)="sendMessage()"
-      />
-      <button (click)="sendMessage()">Send</button>
+    <!-- Chat messages area -->
+    <div class="col-md-9 col-lg-9 bg-white p-0 rounded-lg vh-100">
+      <div *ngIf="selectedChat" class="d-flex flex-column h-100">
+        <!-- Chat header -->
+        <div class="text-white p-3 main-color-bg rounded-top-3 shadow-lg">
+          <h5 class="mb-0">{{ selectedChat.sender }}</h5>
+        </div>
+
+        <!-- Messages list -->
+        <div class="flex-grow-1 overflow-auto p-3 shadow-lg custom-chat-scroll">
+          <div
+            *ngFor="let message of selectedChat.messages"
+            [ngClass]="{
+              'd-flex': true,
+              'flex-row-reverse': isCurrentUser(message.sender._id),
+              'mb-3': true
+            }"
+          >
+            <div
+              [ngClass]="{
+                'rounded p-3 d-flex align-items-center ': true,
+                'bg-primary text-white shadow-lg ': isCurrentUser(
+                  message.sender._id
+                ),
+                'bg-light shadow-lg ': !isCurrentUser(message.sender._id),
+                'fw-bold': !message.read
+              }"
+            >
+              <div
+                [ngClass]="{
+                  circle: true,
+                  'primary-color fs-5': isCurrentUser(message.sender._id)
+                }"
+              >
+                <span>{{ message.sender.userName.charAt(0) }}</span>
+              </div>
+              <div class="d-flex flex-column">
+                <p class="user-name mb-0">
+                  {{ message.sender?.userName || "Unknown User" }}:
+                </p>
+                <p class="mb-0">{{ message.content }}</p>
+                <small
+                  [ngClass]="{
+                    'text-muted': !isCurrentUser(message.sender._id),
+                    'text-white': isCurrentUser(message.sender._id)
+                  }"
+                >
+                  {{ message.timestamp | date : "short" }}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message input form -->
+        <div class="p-3 shadow-lg bg-white rounded-bottom-3">
+          <form (ngSubmit)="sendMessage()" class="d-flex">
+            <input
+              type="text"
+              class="form-control me-2"
+              [(ngModel)]="newMessage"
+              name="newMessage"
+              placeholder="Type a message..."
+            />
+            <button
+              type="submit"
+              class="btn btn-primary d-flex align-items-center"
+            >
+              <span class="material-icons"> send </span>
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>

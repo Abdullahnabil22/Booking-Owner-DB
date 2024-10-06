@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../../Services/messages/messages.service';
-import { LoginService } from '../../Services/login/login.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -8,7 +7,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css',
 })
@@ -21,7 +20,6 @@ export class MessagesComponent {
 
   constructor(
     private messageService: MessageService,
-    private loginService: LoginService,
     private jwtService: JWTService
   ) {}
 
@@ -44,9 +42,6 @@ export class MessagesComponent {
       (groupedMessages) => {
         this.chats = groupedMessages;
         console.log('Grouped messages:', this.chats);
-        this.chats.forEach((chat) =>
-          console.log('First message sender:', chat.messages[0]?.sender)
-        );
       },
       (error) => {
         console.error('Error loading messages:', error);
@@ -79,9 +74,10 @@ export class MessagesComponent {
       const message = {
         senderId: this.currentUserId,
         receiverId: this.getReceiverId(),
-        hostId: this.selectedChat.type === 'host' ? this.selectedChat.id : null,
+        hostId:
+          this.selectedChat.type === 'Hotel' ? this.selectedChat.id : null,
         apartmentId:
-          this.selectedChat.type === 'apartment' ? this.selectedChat.id : null,
+          this.selectedChat.type === 'Apartment' ? this.selectedChat.id : null,
         content: this.newMessage,
       };
 
@@ -91,7 +87,6 @@ export class MessagesComponent {
       this.messageService.sendMessage(message).subscribe(
         (response) => {
           console.log('Message sent successfully:', response);
-          // Add the current user's name to the response before pushing it to the chat
           response.sender = {
             _id: this.currentUserId,
             userName: this.currentUserName,
