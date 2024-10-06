@@ -24,6 +24,7 @@ import { LoginService } from '../../Services/login/login.service';
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
+  isSidebarOpen = false;
   constructor(private loginService: LoginService) {}
   get isUserLoggedIn(): boolean {
     return this.loginService.isUserLoggedIn;
@@ -33,5 +34,8 @@ export class SidebarComponent {
   }
   logout() {
     this.loginService.logout();
+  }
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 }

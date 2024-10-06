@@ -100,7 +100,7 @@
         </div>
 
         <div class="mb-3" formGroupName="beds">
-          <h4>Beds</h4>
+          <p class="fw-medium card-header fs-5">Beds</p>
           <div class="row">
             <div class="col">
               <label for="KingBed">King Beds</label>
@@ -214,7 +214,7 @@
           type="button"
           class="btn btn-danger"
           (click)="removeRoomType(i)"
-          [disabled]="roomTypes.length === 1"
+          [disabled]="i === 0"
         >
           Remove Room Type
         </button>

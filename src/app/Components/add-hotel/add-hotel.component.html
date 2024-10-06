@@ -85,10 +85,8 @@
     </div>
 
     <div class="card mb-4">
-      <div class="card-header main-color-bg text-white">
-        Location
-      </div>
-    
+      <div class="card-header main-color-bg text-white">Location</div>
+
       <div class="card-body" formGroupName="location">
         <div class="mb-3">
           <label for="address-input">Address</label>
@@ -99,42 +97,78 @@
             (input)="onAddressInput($event)"
             [value]="addressInput"
             placeholder="Start typing an address..."
-          >
+          />
         </div>
-    
+
         <div class="row" formGroupName="Address">
           <div class="col-md-6 mb-3">
             <label for="address-en">Address (English)</label>
-            <input id="address-en" type="text" class="form-control" formControlName="en" readonly>
+            <input
+              id="address-en"
+              type="text"
+              class="form-control"
+              formControlName="en"
+              readonly
+            />
           </div>
-    
+
           <div class="col-md-6 mb-3">
             <label for="address-ar">Address (Arabic)</label>
-            <input id="address-ar" type="text" class="form-control" formControlName="ar" readonly>
+            <input
+              id="address-ar"
+              type="text"
+              class="form-control"
+              formControlName="ar"
+              readonly
+            />
           </div>
         </div>
-    
+
         <div class="row" formGroupName="city">
           <div class="col-md-6 mb-3">
             <label for="city-en">City (English)</label>
-            <input id="city-en" type="text" class="form-control" formControlName="en" readonly>
+            <input
+              id="city-en"
+              type="text"
+              class="form-control"
+              formControlName="en"
+              readonly
+            />
           </div>
-    
+
           <div class="col-md-6 mb-3">
             <label for="city-ar">City (Arabic)</label>
-            <input id="city-ar" type="text" class="form-control" formControlName="ar" readonly>
+            <input
+              id="city-ar"
+              type="text"
+              class="form-control"
+              formControlName="ar"
+              readonly
+            />
           </div>
         </div>
-    
+
         <div class="row" formGroupName="country">
           <div class="col-md-6 mb-3">
             <label for="country-en">Country (English)</label>
-            <input id="country-en" type="text" class="form-control" formControlName="en" readonly>
+            <input
+              id="country-en"
+              type="text"
+              class="form-control"
+              formControlName="en"
+              readonly
+            />
           </div>
-    
+
           <div class="col-md-6 mb-3">
             <label for="country-ar">Country (Arabic)</label>
-            <input id="country-ar" type="text" class="form-control" formControlName="ar" readonly>
+            <input
+              id="country-ar"
+              type="text"
+              class="form-control"
+              formControlName="ar"
+              readonly
+            />
           </div>
         </div>
       </div>
@@ -147,7 +181,7 @@
           <div class="col-md-4 mb-3">
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input border-black"
                 type="checkbox"
                 id="noSmoking"
                 formControlName="NoSmoking"
@@ -158,7 +192,7 @@
           <div class="col-md-4 mb-3">
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input border-black"
                 type="checkbox"
                 id="noPets"
                 formControlName="NoPets"
@@ -169,7 +203,7 @@
           <div class="col-md-4 mb-3">
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input border-black"
                 type="checkbox"
                 id="noParties"
                 formControlName="NoParties"
@@ -201,7 +235,9 @@
         </div>
 
         <div class="mb-3">
-          <label for="pricePerNight" class="form-label">Price per Night</label>
+          <label for="pricePerNight" class="form-label"
+            >Price per Night (EGP)</label
+          >
           <input
             type="number"
             class="form-control"
@@ -211,7 +247,7 @@
           />
         </div>
 
-        <h6 class="fw-medium">Cancellation</h6>
+        <p class="card-header fw-medium fs-5">Cancellation</p>
         <div formGroupName="Cancellation">
           <div class="row" formGroupName="Policy">
             <div class="col-md-6 mb-3">
@@ -240,7 +276,7 @@
             <div class="col-md-6 mb-3">
               <div class="form-check">
                 <input
-                  class="form-check-input"
+                  class="form-check-input border-black"
                   type="checkbox"
                   id="refundable"
                   formControlName="Refundable"
