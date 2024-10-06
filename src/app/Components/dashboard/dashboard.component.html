@@ -1,1 +1,35 @@
-<p>dashboard works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card rounded-4 p-4 text-black dashboard-card">
+        <div class="card-body row flex-column">
+          <p class="fw-bold fs-5">
+            Welcome to <span class="main-color">Booking</span
+            ><span class="com">.com</span> ,
+            {{ userDetails?.firstName ?? "" }}
+            {{ userDetails?.lastName ?? "" }}
+          </p>
+          <p class="fs-5 fw-medium m-0">
+            Get your property ready to be flooded by guests now!
+          </p>
+          <button
+            class="btn main-color-bg-hover text-white fw-medium fs-5 mt-5 w-50"
+            routerLink="/add-property"
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card rounded-4 p-4">
+        <div class="card-body">
+          <h5 class="card-title" id="earnings-overview">Earnings Overview</h5>
+          <canvas #earningsChart></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
