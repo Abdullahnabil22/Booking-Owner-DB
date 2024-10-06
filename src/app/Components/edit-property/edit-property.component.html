@@ -1,41 +1,26 @@
-<!-- src/app/components/edit-property/edit-property.component.html -->
-<div *ngIf="hotels.length > 0; else noHotels">
+<div *ngIf="hotels.length > 0; else noHotels" class="hotel-list">
   <div *ngFor="let hotel of hotels" class="hotel-card">
-    <img *ngIf="hotel.images.length > 0" [src]="hotel.images" alt="{{ hotel.name.en }}" class="hotel-image"/>
-    <h3>{{ hotel.name.en }}</h3>
-    <p>{{ hotel.subDescription.en }}</p>
-    <p>{{ hotel.description.en }}</p>
-    <p>Location: {{ hotel.location.Address.en }}, {{ hotel.location.city.en }}, {{ hotel.location.country.en }}</p>
-    <p>Price per night: {{ hotel.PricePerNight | currency }}</p>
-    <p>Average Rating: {{ hotel.AverageRating }}</p>
-    <p>Check-in: {{ hotel.CheckInTime }}, Check-out: {{ hotel.CheckOutTime }}</p>
-    <p *ngIf="hotel.approved">This hotel is approved.</p>
-    <p *ngIf="!hotel.approved">This hotel is not approved.</p>
-    <p>Contact: {{ hotel.phone }}</p>
-    <p>Contact: {{ hotel._id }}</p>
-    <button class="btn btn-danger" (click)="onUpdateHotel(hotel._id )">update</button>
-    <button class="btn btn-danger" (click)="onDeleteHotel(hotel._id )">delet</button>
-
-  </div>
-  <div *ngFor="let hotel of hotels" class="hotel-card">
-    <img *ngIf="hotel.images.length > 0" [src]="hotel.images" alt="{{ hotel.name.en }}" class="hotel-image"/>
-    <h3>{{ hotel.name.ar }}</h3>
-    <p>{{ hotel.subDescription.ar }}</p>
-    <p>{{ hotel.description.ar }}</p>
-    <p>Location: {{ hotel.location.Address.ar }}, {{ hotel.location.city.en }}, {{ hotel.location.country.en }}</p>
-    <p>Price per night: {{ hotel.PricePerNight | currency }}</p>
-    <p>Average Rating: {{ hotel.AverageRating }}</p>
-    <p>Check-in: {{ hotel.CheckInTime }}, Check-out: {{ hotel.CheckOutTime }}</p>
-    <p *ngIf="hotel.approved">This hotel is approved.</p>
-    <p *ngIf="!hotel.approved">This hotel is not approved.</p>
-    <p>Contact: {{ hotel.phone }}</p>
-    <p>Contact: {{ hotel._id }}</p>
-    <button class="btn btn-danger" (click)="onUpdateHotel(hotel._id )">update</button>
-
+    <img *ngIf="hotel.images.length > 0" [src]="hotel.images[0]" alt="{{ hotel.name.en }}" class="hotel-image"/>
+    <div class="hotel-details">
+      <h3>{{ hotel.name.en }}</h3>
+      <p class="sub-description">{{ hotel.subDescription.en }}</p>
+      <p class="description">{{ hotel.description.en }}</p>
+      <p>Location: {{ hotel.location.Address.en }}, {{ hotel.location.city.en }}, {{ hotel.location.country.en }}</p>
+      <p class="price">Price per night: {{ hotel.PricePerNight | currency }}</p>
+      <p>Average Rating: {{ hotel.AverageRating > 0 ? hotel.AverageRating : 'Not Rated Yet' }}</p>
+      <p>Check-in: {{ hotel.CheckInTime }}, Check-out: {{ hotel.CheckOutTime }}</p>
+      <p *ngIf="hotel.approved" class="approval-status approved">This hotel is approved.</p>
+      <p *ngIf="!hotel.approved" class="approval-status not-approved">This hotel is not approved.</p>
+      <p>Contact: {{ hotel.phone }}</p>
+      <p>ID: {{ hotel._id }}</p>
+      <div class="button-group">
+        <button class="btn btn-primary" (click)="onUpdateHotel(hotel._id)">Update</button>
+        <button class="btn btn-danger" (click)="onDeleteHotel(hotel._id)">Delete</button>
+      </div>
+    </div>
   </div>
 </div>
 
-
 <ng-template #noHotels>
-  <p>No hotels found for this user.</p>
+  <p class="no-hotels-message">No hotels found for this user.</p>
 </ng-template>

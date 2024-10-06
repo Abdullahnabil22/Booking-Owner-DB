@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Hotel } from '../../model/hotel';
+import { tap, catchError } from 'rxjs/operators';
+import { error } from 'console';
 
 
 @Injectable({
@@ -80,6 +82,7 @@ updateHotel(updatedHotel: Hotel): Observable<Hotel> {
   );
 }
 
+
 // Service for getting a hotel by ID
 getHotelById(hotelId: string): Observable<any> {
   console.log("hamadaid",hotelId)
@@ -87,7 +90,16 @@ getHotelById(hotelId: string): Observable<any> {
  console.log("result",resulat)
  return resulat
 }
-  
+///////////////////////// vistor
+getVisitors(hotelId: string): Observable<any[]> {
+  const url = `${this.apiUrl}/host/visitors/${hotelId}`;
+  console.log('Fetching visitors from:', url);
+  return this.http.get<any[]>(url).pipe(
+    tap(data => console.log('Fetched visitors:', data)),
+   
+  );
+}
+
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
