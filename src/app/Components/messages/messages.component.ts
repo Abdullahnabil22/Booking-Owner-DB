@@ -1,108 +1,128 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { MessagesService } from '../../Services/messages/messages.service';
+import { MessageService } from '../../Services/messages/messages.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
-import { ChatReplyComponent } from '../chat-reply/chat-reply.component';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, ChatReplyComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css',
 })
-export class MessagesComponent implements OnInit {
-  users: any[] = [
-    {
-      id: 1,
-      name: 'Vincent Porter',
-      avatar: 'https://bootdey.com/img/Content/avatar/avatar1.png',
-      status: 'online',
-      lastSeen: '2 hours ago',
-    },
-    {
-      id: 2,
-      name: 'Aiden Chavez',
-      avatar: 'https://bootdey.com/img/Content/avatar/avatar2.png',
-      status: 'online',
-      lastSeen: '1 hour ago',
-    },
-    // Add more users as needed
-  ];
-
-  selectedUser: any;
-  messages: any[] = [];
+export class MessagesComponent {
+  chats: any[] = [];
   newMessage: string = '';
-  currentUser = {
-    id: 0,
-    name: 'Current User',
-    avatar: 'path_to_current_user_avatar',
-  };
+  selectedChat: any = null;
+  currentUserId: string = '';
+  currentUserName: string = '';
 
   constructor(
-    private messageService: MessagesService,
+    private messageService: MessageService,
     private jwtService: JWTService
   ) {}
 
   ngOnInit() {
-    this.currentUser.id = this.jwtService.decodeToken(
-      localStorage.getItem('token')!
-    ).id;
-  }
-
-  selectUser(user: any) {
-    this.selectedUser = user;
+    this.getCurrentUserInfo();
     this.loadMessages();
   }
 
+  getCurrentUserInfo() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = this.jwtService.decodeToken(token);
+      this.currentUserId = decodedToken.id;
+      this.currentUserName = decodedToken.username || 'Unknown User';
+    }
+  }
+
   loadMessages() {
-    this.messageService.getAllUserMessages().subscribe(
-      (messages) => {
-        this.messages = messages.filter(
-          (m) =>
-            (m.user_id === this.selectedUser.id &&
-              m.host_id === this.currentUser.id) ||
-            (m.user_id === this.currentUser.id &&
-              m.host_id === this.selectedUser.id)
-        );
-        this.messages.sort(
-          (a, b) =>
-            new Date(a.timestamps).getTime() - new Date(b.timestamps).getTime()
-        );
+    this.messageService.getMessages().subscribe(
+      (groupedMessages) => {
+        this.chats = groupedMessages;
+        console.log('Grouped messages:', this.chats);
       },
-      (error) => console.error('Error loading messages:', error)
+      (error) => {
+        console.error('Error loading messages:', error);
+      }
     );
   }
 
+  selectChat(chat: any) {
+    this.selectedChat = chat;
+    this.markMessagesAsRead(chat);
+  }
+
+  markMessagesAsRead(chat: any) {
+    chat.messages.forEach((message: any) => {
+      if (!message.read && message.sender.id !== this.currentUserId) {
+        this.messageService.markAsRead(message.id).subscribe(
+          () => {
+            message.read = true;
+          },
+          (error) => {
+            console.error('Error marking message as read:', error);
+          }
+        );
+      }
+    });
+  }
+
   sendMessage() {
-    if (this.newMessage.trim()) {
-      const messageData = {
-        host_id: this.currentUser.id,
-        user_id: this.selectedUser.id,
-        apartment_id: null,
+    if (this.newMessage.trim() && this.selectedChat) {
+      const message = {
+        senderId: this.currentUserId,
+        receiverId: this.getReceiverId(),
+        hostId:
+          this.selectedChat.type === 'Hotel' ? this.selectedChat.id : null,
+        apartmentId:
+          this.selectedChat.type === 'Apartment' ? this.selectedChat.id : null,
         content: this.newMessage,
-        timestamps: new Date(),
-        status: 'unread',
-        sender: this.currentUser.id,
       };
 
-      this.messageService.sendMessage(messageData).subscribe(
-        (newMessage) => {
-          this.messages.push(newMessage);
+      console.log('Sending message:', message);
+      console.log('Selected chat:', this.selectedChat);
+
+      this.messageService.sendMessage(message).subscribe(
+        (response) => {
+          console.log('Message sent successfully:', response);
+          response.sender = {
+            _id: this.currentUserId,
+            userName: this.currentUserName,
+          };
+          this.selectedChat.messages.push(response);
           this.newMessage = '';
         },
-        (error) => console.error('Error sending message:', error)
+        (error) => {
+          console.error('Error sending message:', error);
+        }
       );
+    } else {
+      console.log('Cannot send message: ', {
+        newMessage: this.newMessage,
+        selectedChat: this.selectedChat,
+      });
     }
   }
 
-  getUserAvatar(senderId: number): string {
-    if (senderId === this.currentUser.id) {
-      return this.currentUser.avatar;
+  getReceiverId(): string {
+    if (
+      this.selectedChat &&
+      this.selectedChat.messages &&
+      this.selectedChat.messages.length > 0
+    ) {
+      const firstMessage = this.selectedChat.messages[0];
+      if (firstMessage.sender && firstMessage.receiver) {
+        return firstMessage.sender._id === this.currentUserId
+          ? firstMessage.receiver._id
+          : firstMessage.sender._id;
+      }
     }
-    const user = this.users.find((u) => u.id === senderId);
-    return user ? user.avatar : '';
+    return this.selectedChat ? this.selectedChat.id : '';
+  }
+
+  isCurrentUser(senderId: string): boolean {
+    return senderId === this.currentUserId;
   }
 }

@@ -1,0 +1,28 @@
+<form [formGroup]="amenitiesForm" (ngSubmit)="onSubmit()">
+  <div class="card mb-4" *ngFor="let amenityGroup of amenityGroups">
+    <div class="card-header main-color-bg text-white">
+      {{ amenityGroup.title }}
+    </div>
+    <div class="card-body" [formGroupName]="amenityGroup.name">
+      <div class="row">
+        <div
+          class="col-md-4 mb-3"
+          *ngFor="let amenity of amenityGroup.amenities"
+        >
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [formControlName]="camelCase(amenity)"
+              [id]="camelCase(amenity)"
+            />
+            <label class="form-check-label" [for]="camelCase(amenity)">
+              {{ amenity }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit Amenities</button>
+</form>

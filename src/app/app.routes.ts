@@ -11,12 +11,20 @@ import { MainlayoutComponent } from './Components/mainlayout/mainlayout.componen
 import { userauthGuard } from './Guards/userauth.guard';
 import { EditHotelComponent } from './Components/edit-Hotel/edit-hotel/edit-hotel.component';
 import { VisitorChartComponent } from './visitor-chart/visitor-chart.component';
+import { AmenitiesComponent } from './Components/amenities/amenities.component';
+import { AddRoomComponent } from './Components/add-room/add-room.component';
+
 
 export const routes: Routes = [
   {
     path: '',
     component: MainlayoutComponent,
     children: [
+      {
+        path: '',
+        redirectTo: '/dashboard',
+        pathMatch: 'full',
+      },
       {
         path: 'dashboard',
         component: DashboardComponent,
@@ -30,6 +38,16 @@ export const routes: Routes = [
       {
         path: 'add-property/hotel',
         component: AddHotelComponent,
+        canActivate: [userauthGuard],
+      },
+      {
+        path: 'add-property/amenities/:id',
+        component: AmenitiesComponent,
+        canActivate: [userauthGuard],
+      },
+      {
+        path: 'add-property/room/:id',
+        component: AddRoomComponent,
         canActivate: [userauthGuard],
       },
       {
