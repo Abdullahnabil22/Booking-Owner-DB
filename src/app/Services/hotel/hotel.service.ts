@@ -92,13 +92,19 @@ getHotelById(hotelId: string): Observable<any> {
 }
 ///////////////////////// vistor
 getVisitors(hotelId: string): Observable<any[]> {
-  const url = `${this.apiUrl}/host/visitors/${hotelId}`;
-  console.log('Fetching visitors from:', url);
-  return this.http.get<any[]>(url).pipe(
-    tap(data => console.log('Fetched visitors:', data)),
-   
-  );
-}
+    const url = `${this.apiUrl}/earnings/${hotelId}`;
+    console.log('Fetching visitors from:', url);
+    return this.http.get<any[]>(url).pipe(
+      tap(data => console.log('Fetched visitors:', data)),
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: any): Observable<never> {
+    console.error('An error occurred:', error);
+    throw error;
+  }
+
 
 
   uploadImage(file: File): Observable<string> {
