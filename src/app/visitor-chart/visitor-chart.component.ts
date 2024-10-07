@@ -14,6 +14,8 @@ export class VisitorChartComponent implements OnInit, AfterViewInit {
   @ViewChild('visitorChart') private chartRef!: ElementRef<HTMLCanvasElement>;
   private chart: Chart<'pie', number[], string> | undefined;
 
+  
+
   constructor(private hotelService: HotelService) {}
 
   ngOnInit(): void {
