@@ -32,6 +32,9 @@ export class EditHotelComponent {
     }
   }
 
+
+  
+
   updateHotel(updatedHotel: Hotel): void {
     console.log("Updating hotel:", updatedHotel);
   
