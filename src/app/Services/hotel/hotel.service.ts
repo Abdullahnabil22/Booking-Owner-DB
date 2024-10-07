@@ -90,7 +90,7 @@ getHotelById(hotelId: string): Observable<any> {
  console.log("result",resulat)
  return resulat
 }
-///////////////////////// vistor
+///////////////////////// vistors
 getVisitors(hotelId: string): Observable<any[]> {
     const url = `${this.apiUrl}/earnings/${hotelId}`;
     console.log('Fetching visitors from:', url);
