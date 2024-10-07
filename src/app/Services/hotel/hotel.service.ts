@@ -107,7 +107,6 @@ getVisitors(hotelId: string): Observable<any[]> {
   }
 
 
-
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('image', file);
