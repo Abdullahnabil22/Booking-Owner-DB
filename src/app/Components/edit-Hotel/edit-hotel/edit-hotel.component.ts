@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './edit-hotel.component.html',
-  styleUrls: ['./edit-hotel.component.css'], // Corrected property name
+  styleUrls: ['./edit-hotel.component.css'], 
 })
 export class EditHotelComponent {
   hotel: Hotel = {} as Hotel;
