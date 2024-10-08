@@ -58,6 +58,7 @@ export class EditPropertyComponent implements OnInit {
 
   onUpdateHotel(hotelId: string): void {
     this.router.navigate([ '/edit-Hotel', hotelId]);
+    
   }
 
   onDeleteHotel(hotelId: string): void {
