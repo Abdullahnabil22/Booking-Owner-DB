@@ -60,34 +60,46 @@ export class HotelService {
 
   /////////////////////////// update
 
-  updateHotel(updatedHotel: Hotel): Observable<Hotel> {
-    return this.http.patch<Hotel>(
-      `${this.apiUrl}/host/${updatedHotel._id}`,
-      updatedHotel,
-      {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        }),
-      }
+updateHotel(updatedHotel: Hotel): Observable<Hotel> {
+  return this.http.patch<Hotel>(
+    `${this.apiUrl}/host/${updatedHotel._id}`, 
+    updatedHotel, 
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      })
+    }
+  );
+}
+
+
+// Service for getting a hotel by ID
+getHotelById(hotelId: string): Observable<any> {
+  console.log("hamadaid",hotelId)
+ const resulat= this.http.get(`${this.apiUrl}/host/${hotelId}`);
+ console.log("result",resulat)
+ return resulat
+}
+
+
+
+
+///////////////////////// vistor
+getVisitors(hotelId: string): Observable<any[]> {
+    const url = `${this.apiUrl}/earnings/${hotelId}`;
+    console.log('Fetching visitors from:', url);
+    return this.http.get<any[]>(url).pipe(
+      tap(data => console.log('Fetched visitors:', data)),
+      catchError(this.handleError)
     );
   }
 
-  // Service for getting a hotel by ID
-  getHotelById(hotelId: string): Observable<any> {
-    console.log('hamadaid', hotelId);
-    const resulat = this.http.get(`${this.apiUrl}/host/${hotelId}`);
-    console.log('result', resulat);
-    return resulat;
+  private handleError(error: any): Observable<never> {
+    console.error('An error occurred:', error);
+    throw error;
   }
-  ///////////////////////// vistor
-  getVisitors(hotelId: string): Observable<any[]> {
-    const url = `${this.apiUrl}/host/visitors/${hotelId}`;
-    console.log('Fetching visitors from:', url);
-    return this.http
-      .get<any[]>(url)
-      .pipe(tap((data) => console.log('Fetched visitors:', data)));
-  }
+
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
