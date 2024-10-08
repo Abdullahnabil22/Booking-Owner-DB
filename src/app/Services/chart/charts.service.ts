@@ -43,7 +43,7 @@ export class ChartsService {
             fill: true,
           },
           {
-            label: 'Host Earnings',
+            label: 'Hotel Earnings',
             data: hostData,
             borderColor: 'rgba(26, 76, 243, 1)',
             backgroundColor: 'rgba(26, 76, 243, 0.2)',
@@ -54,13 +54,14 @@ export class ChartsService {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         scales: {
           y: {
             beginAtZero: true,
             suggestedMax: 10000,
             title: {
               display: true,
-              text: 'Earnings ($)',
+              text: 'Earnings (EGP)',
             },
           },
           x: {
@@ -84,6 +85,7 @@ export class ChartsService {
 
     return new Chart(ctx, chartConfig);
   }
+
   private getUniqueLabels(...datasets: any[]): string[] {
     const allLabels = datasets.flatMap((dataset) =>
       dataset.map((item: any) => item._id)
@@ -98,5 +100,48 @@ export class ChartsService {
       const matchingItem = data.find((item) => item._id === label);
       return matchingItem ? matchingItem.totalEarnings : 0;
     });
+  }
+
+  createDonutChart(ctx: HTMLCanvasElement, data: any): Chart {
+    const apartmentMembers = data.apartmentBookings.reduce(
+      (sum: number, booking: any) => sum + booking.totalMembers,
+      0
+    );
+    const hostMembers = data.hostBookings.reduce(
+      (sum: number, booking: any) => sum + booking.totalMembers,
+      0
+    );
+
+    const chartConfig: ChartConfiguration = {
+      type: 'doughnut',
+      data: {
+        labels: ['Apartment Members', 'Hotel Members'],
+        datasets: [
+          {
+            data: [apartmentMembers, hostMembers],
+            backgroundColor: [
+              'rgba(75, 192, 192, 0.8)',
+              'rgba(26, 76, 243, 0.8)',
+            ],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: false,
+            text: 'Total Members Distribution',
+          },
+        },
+      },
+    };
+
+    return new Chart(ctx, chartConfig);
   }
 }

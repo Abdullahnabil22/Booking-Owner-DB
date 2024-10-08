@@ -89,37 +89,36 @@
 
       <div class="card-body" formGroupName="location">
         <div class="mb-3">
-          <label for="address-input">Address</label>
           <input
-            id="address-input"
             type="text"
             class="form-control"
+            placeholder="Search Address"
             (input)="onAddressInput($event)"
-            [value]="addressInput"
-            placeholder="Start typing an address..."
           />
         </div>
-
+        <div
+          #mapContainer
+          id="mapContainer"
+          style="width: 100%; height: 400px"
+          class="mb-3 rounded-4 shadow-sm"
+        ></div>
         <div class="row" formGroupName="Address">
           <div class="col-md-6 mb-3">
-            <label for="address-en">Address (English)</label>
+            <label for="addressEn" class="form-label">Address (English)</label>
             <input
-              id="address-en"
               type="text"
+              id="addressEn"
               class="form-control"
               formControlName="en"
-              readonly
             />
           </div>
-
           <div class="col-md-6 mb-3">
-            <label for="address-ar">Address (Arabic)</label>
+            <label for="addressAr" class="form-label">Address (Arabic)</label>
             <input
-              id="address-ar"
               type="text"
+              id="addressAr"
               class="form-control"
               formControlName="ar"
-              readonly
             />
           </div>
         </div>

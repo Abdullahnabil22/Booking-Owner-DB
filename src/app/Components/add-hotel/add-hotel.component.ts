@@ -1,6 +1,11 @@
-import { Component, NgZone, OnInit } from '@angular/core';
 import {
-  FormArray,
+  Component,
+  NgZone,
+  OnInit,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
+import {
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -29,6 +34,7 @@ import { HeremapsService } from '../../Services/heremaps/heremaps.service';
   styleUrls: ['./add-hotel.component.css'],
 })
 export class AddHotelComponent {
+  @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef;
   hotelForm!: FormGroup;
   selectedFiles: File[] = [];
   errorMessage: string = '';
@@ -44,6 +50,23 @@ export class AddHotelComponent {
 
   ngOnInit() {
     this.initForm();
+    this.hereMapsService.getLocationSelected().subscribe((coord) => {
+      this.zone.run(() => {
+        this.updateFormWithCoordinates(coord);
+      });
+    });
+  }
+
+  ngAfterViewInit() {
+    this.zone.run(() => {
+      setTimeout(() => {
+        if (this.mapContainer && this.mapContainer.nativeElement) {
+          this.hereMapsService.initMap(this.mapContainer);
+        } else {
+          console.error('Map container not found');
+        }
+      }, 0);
+    });
   }
 
   initForm() {
@@ -117,6 +140,7 @@ export class AddHotelComponent {
       this.searchAddress(input);
     }
   }
+
   searchAddress(query: string) {
     this.hereMapsService.searchAddress(query).subscribe(
       (location) => {
@@ -130,11 +154,9 @@ export class AddHotelComponent {
     );
   }
 
-
   updateFormWithAddress(location: any) {
     const addressEn = location.en.address;
     const addressAr = location.ar.address;
-
 
     this.hotelForm.patchValue({
       location: {
@@ -154,6 +176,18 @@ export class AddHotelComponent {
     });
   }
 
+  updateFormWithCoordinates(coord: any) {
+    this.hereMapsService.searchAddress(`${coord.lat},${coord.lng}`).subscribe(
+      (location) => {
+        this.zone.run(() => {
+          this.updateFormWithAddress(location);
+        });
+      },
+      (error) => {
+        console.error('Error reverse geocoding:', error);
+      }
+    );
+  }
   onFileSelect(event: Event) {
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;

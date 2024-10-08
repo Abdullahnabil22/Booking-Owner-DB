@@ -15,12 +15,14 @@ import { ChartsService } from '../../Services/chart/charts.service';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
-  @ViewChild('earningsChart') chartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('earningsChart')
+  earningsChartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('membersChart') membersChartCanvas!: ElementRef<HTMLCanvasElement>;
 
   userDetails: any;
-  chart!: Chart;
+  earningsChart!: Chart;
   ownerId: string = '';
-
+  membersChart!: Chart;
   constructor(
     private chartService: ChartsService,
     private userService: UserService,
@@ -52,11 +54,18 @@ export class DashboardComponent {
     this.chartService.getEarningsData(this.ownerId).subscribe(
       (data: any) => {
         console.log('Received chart data:', data);
-        if (this.chart) {
-          this.chart.destroy();
+        if (this.earningsChart) {
+          this.earningsChart.destroy();
         }
-        this.chart = this.chartService.createChart(
-          this.chartCanvas.nativeElement,
+        if (this.membersChart) {
+          this.membersChart.destroy();
+        }
+        this.earningsChart = this.chartService.createChart(
+          this.earningsChartCanvas.nativeElement,
+          data
+        );
+        this.membersChart = this.chartService.createDonutChart(
+          this.membersChartCanvas.nativeElement,
           data
         );
       },
