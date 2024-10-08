@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Chart, registerables } from 'chart.js';
-import { HotelService } from '../Services/hotel/hotel.service';
+import { Component, OnInit, AfterViewInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Chart, registerables, ChartConfiguration, ChartData } from 'chart.js';
+import { HotelService } from './../Services/hotel/hotel.service';
 
 Chart.register(...registerables);
 
@@ -9,35 +9,31 @@ Chart.register(...registerables);
   templateUrl: './visitor-chart.component.html',
   styleUrls: ['./visitor-chart.component.css']
 })
-export class VisitorChartComponent implements OnInit, OnChanges {
-  @Input() hotelId = "66fd6d630a422c7e59abc300";
+export class VisitorChartComponent implements OnInit, AfterViewInit {
+  @Input() hotelId: string = '66f9f2cfa46b697f106da79c';
+  @ViewChild('visitorChart') private chartRef!: ElementRef<HTMLCanvasElement>;
+  private chart: Chart<'pie', number[], string> | undefined;
 
-  private chart: Chart | undefined;
+  
 
   constructor(private hotelService: HotelService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadVisitorData();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['hotelId'] && !changes['hotelId'].firstChange) {
-      this.loadVisitorData();
-    }
+  ngAfterViewInit(): void {
+    console.log('ngAfterViewInit called');
   }
 
-  private loadVisitorData() {
-    if (!this.hotelId) {
-      console.error('Hotel ID is not provided');
-      return;
-    }
-
+  private loadVisitorData(): void {
     this.hotelService.getVisitors(this.hotelId).subscribe(
-      (data) => {
-        if (data && data.length > 0) {
-          this.createChart(data);
+      (data: any) => {
+        if (data) {
+          console.log('Received data:', data);
+          this.waitForCanvas(() => this.createChart(data));
         } else {
-          console.error('No visitor data available');
+          console.error('No visitor data available or invalid data format');
         }
       },
       (error) => {
@@ -46,51 +42,71 @@ export class VisitorChartComponent implements OnInit, OnChanges {
     );
   }
 
-  private createChart(visitorData: any[]) {
-    const ctx = document.getElementById('visitorChart') as HTMLCanvasElement;
-    if (!ctx) {
-      console.error('Canvas element not found');
+  private waitForCanvas(callback: () => void): void {
+    if (this.chartRef && this.chartRef.nativeElement) {
+      setTimeout(() => {
+        callback();
+      }, 100);
+    } else {
+      requestAnimationFrame(() => this.waitForCanvas(callback));
+    }
+  }
+
+  private createChart(data: any): void {
+    console.log('Creating chart with data:', data);
+    if (!this.chartRef || !this.chartRef.nativeElement) {
+      console.error('Chart canvas element not found');
       return;
     }
 
-    // Destroy existing chart if it exists
+    const ctx = this.chartRef.nativeElement.getContext('2d');
+    if (!ctx) {
+      console.error('Unable to get 2D context for canvas');
+      return;
+    }
+
+    // Calculate total visitors for hosts and apartments
+    const totalHostVisitors = data.hostBookings.reduce((sum: number, item: any) => sum + item.totalMembers, 0);
+    const totalApartmentVisitors = data.apartmentBookings.reduce((sum: number, item: any) => sum + item.totalMembers, 0);
+
+    // Destroy previous chart instance if it exists
     if (this.chart) {
       this.chart.destroy();
     }
 
-    const dates = visitorData.map(item => new Date(item.date).toLocaleDateString());
-    const counts = visitorData.map(item => item.count);
+    const chartData: ChartData<'pie', number[], string> = {
+      labels: ['Host Visitors', 'Apartment Visitors'],
+      datasets: [{
+        data: [totalHostVisitors, totalApartmentVisitors],
+        backgroundColor: [
+          'rgba(91, 186, 255, 0.8)',
+          'rgba(255, 91, 91, 0.8)'
+        ],
+        borderColor: [
+          'rgba(91, 186, 255, 1)',
+          'rgba(255, 91, 91, 1)'
+        ],
+        borderWidth: 1
+      }]
+    };
 
-    this.chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: dates,
-        datasets: [{
-          label: 'Hotel Visitors',
-          data: counts,
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
-        }]
-      },
+    const config: ChartConfiguration<'pie', number[], string> = {
+      type: 'pie',
+      data: chartData,
       options: {
         responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Number of Visitors'
-            }
+        plugins: {
+          legend: {
+            position: 'top',
           },
-          x: {
-            title: {
-              display: true,
-              text: 'Date'
-            }
+          title: {
+            display: true,
+            text: 'Visitor Distribution'
           }
         }
       }
-    });
+    };
+
+    this.chart = new Chart(ctx, config);
   }
 }

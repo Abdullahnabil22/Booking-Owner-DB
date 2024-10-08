@@ -35,6 +35,7 @@ export const routes: Routes = [
         component: AddPropertyComponent,
         canActivate: [userauthGuard],
       },
+     
       {
         path: 'add-property/hotel',
         component: AddHotelComponent,
