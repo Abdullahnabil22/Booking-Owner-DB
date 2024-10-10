@@ -1,11 +1,12 @@
 <div class="container">
+  <h2 class="Apartments">Property</h2>
+  
   <!-- Hotels Section -->
-  <h2 class="Apartments">property</h2>
-  <div *ngIf="hotels.length > 0; else noHotels" class="hotel-list">
+  <div *ngIf="hotels.length > 0" class="hotel-list">
     <table class="hotel-table">
       <thead>
         <tr>
-          <th>Hotel</th>
+          <th>Property</th>
           <th>Location</th>
           <th>Price per Night</th>
           <th>Rating</th>
@@ -53,83 +54,72 @@
             </td>
           </tr>
         </ng-container>
+        <!-- //////////////////////////////////////// -->
+        <!-- Apartments Section -->
+        <ng-container *ngFor="let apartment of apartments; let i = index">
+          <tr (click)="toggleApartmentDetails(i)" [class.expanded]="expandedApartmentIndex === i">
+            <td>
+              <div class="hotel-card">
+                <img *ngIf="apartment.images.length > 0" [src]="apartment.images[0]" alt="{{ apartment.name.en }}" class="hotel-image"/>
+                <div>
+                  <h3>{{ apartment.name.en }}</h3>
+                  <p class="sub-description">{{ apartment.subDescription.en }}</p>
+                </div>
+              </div>
+            </td>
+            <td>{{ apartment.location.city.en }}, {{ apartment.location.country.en }}</td>
+            <td class="price">{{ apartment.HouseRules.PricePerNight | currency }}</td>
+            <td>
+              <div class="rating">
+                <span class="stars">{{apartment.AverageRating }}</span>
+                
+              </div>
+            </td>
+            <!-- <td>
+              Bedrooms: {{ apartment.Rooms.Bedrooms }}, 
+              Bathrooms: {{ apartment.Rooms.Bathrooms }}
+            </td> -->
+            <td>
+              <div class="button-group">
+                <button class="btn btn-primary" (click)="onUpdateApartment(apartment._id); $event.stopPropagation()">Update</button>
+                <button class="btn btn-danger" (click)="onDeleteApartment(apartment._id); $event.stopPropagation()">Delete</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="expandedApartmentIndex === i" class="details-row">
+            <td colspan="5">
+              <div class="hotel-details">
+                <p><strong>Description:</strong> {{ apartment.description.en }}</p>
+                <p><strong>Address:</strong> {{ apartment.location.address.en }}</p>
+                <p><strong>Check-in:</strong> {{ apartment.HouseRules.CheckInTime }} | <strong>Check-out:</strong> {{ apartment.HouseRules.CheckOutTime }}</p>
+                <p><strong>Contact:</strong> {{ apartment.phone }}</p>
+                <p><strong>House Rules:</strong></p>
+                <ul>
+                  <li>No Smoking: {{ apartment.HouseRules.NoSmoking ? 'Yes' : 'No' }}</li>
+                  <li>No Pets: {{ apartment.HouseRules.NoPets ? 'Yes' : 'No' }}</li>
+                  <li>No Parties: {{ apartment.HouseRules.NoParties ? 'Yes' : 'No' }}</li>
+                </ul>
+                <p><strong>Facilities:</strong></p>
+                <ul>
+                  <li *ngFor="let facility of getFacilities(apartment.Facilities)">
+                    {{ facility.name }}: {{ facility.available ? 'Yes' : 'No' }}
+                  </li>
+                </ul>
+                <p class="approval-status" [class.approved]="apartment.approved">
+                  {{ apartment.approved ? 'Approved' : 'Not Approved' }}
+                </p>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+
       </tbody>
     </table>
   </div>
 
+  
+
   <ng-template #noHotels>
-    <p class="no-hotels-message">No hotels found for this user.</p>
+    <p class="no-hotels-message">No properties found for this user.</p>
   </ng-template>
-
-  <!-- Apartments Section -->
-  <!-- Apartments Section -->
-<!-- <h2 class="Apartments">Apartments</h2> -->
-<div *ngIf="apartments.length > 0; else noApartments" class="apartment-list">
-  <table class="apartment-table">
-    <thead>
-      <tr>
-        <th>Apartment</th>
-        <th>Location</th>
-        <th>Rooms</th>
-        <th>Price per Night</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container *ngFor="let apartment of apartments; let i = index">
-        <tr (click)="toggleApartmentDetails(i)" [class.expanded]="expandedApartmentIndex === i">
-          <td>
-            <div class="apartment-card">
-              <img *ngIf="apartment.images.length > 0" [src]="apartment.images[0]" alt="{{ apartment.name.en }}" class="apartment-image"/>
-              <div>
-                <h3>{{ apartment.name.en }}</h3>
-                <p class="sub-description">{{ apartment.subDescription.en }}</p>
-              </div>
-            </div>
-          </td>
-          <td>{{ apartment.location.city.en }}, {{ apartment.location.country.en }}</td>
-          <td>
-            Bedrooms: {{ apartment.Rooms.Bedrooms }}, 
-            Bathrooms: {{ apartment.Rooms.Bathrooms }}
-          </td>
-          <td class="price">{{ apartment.HouseRules.PricePerNight | currency }}</td>
-          <td>
-            <div class="button-group">
-              <button class="btn btn-primary" (click)="onUpdateApartment(apartment._id); $event.stopPropagation()">Update</button>
-              <button class="btn btn-danger" (click)="onDeleteApartment(apartment._id); $event.stopPropagation()">Delete</button>
-            </div>
-          </td>
-        </tr>
-        <tr *ngIf="expandedApartmentIndex === i" class="details-row">
-          <td colspan="5">
-            <div class="apartment-details">
-              <p><strong>Description:</strong> {{ apartment.description.en }}</p>
-              <p><strong>Address:</strong> {{ apartment.location.address.en }}</p>
-              <p><strong>Check-in:</strong> {{ apartment.HouseRules.CheckInTime }} | <strong>Check-out:</strong> {{ apartment.HouseRules.CheckOutTime }}</p>
-              <p><strong>Contact:</strong> {{ apartment.phone }}</p>
-              <p><strong>House Rules:</strong></p>
-              <ul>
-                <li>No Smoking: {{ apartment.HouseRules.NoSmoking ? 'Yes' : 'No' }}</li>
-                <li>No Pets: {{ apartment.HouseRules.NoPets ? 'Yes' : 'No' }}</li>
-                <li>No Parties: {{ apartment.HouseRules.NoParties ? 'Yes' : 'No' }}</li>
-              </ul>
-              <p><strong>Facilities:</strong></p>
-              <ul>
-                <li *ngFor="let facility of getFacilities(apartment.Facilities)">
-                  {{ facility.name }}: {{ facility.available ? 'Yes' : 'No' }}
-                </li>
-              </ul>
-              <p class="approval-status" [class.approved]="apartment.approved">
-                {{ apartment.approved ? 'Approved' : 'Not Approved' }}
-              </p>
-            </div>
-          </td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
 </div>
-
-<ng-template #noApartments>
-  <p class="no-apartments-message">No apartments found for this user.</p>
-</ng-template>
