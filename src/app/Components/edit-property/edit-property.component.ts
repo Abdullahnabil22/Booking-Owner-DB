@@ -138,9 +138,16 @@ export class EditPropertyComponent implements OnInit {
   }
 
   onDeleteApartment(apartmentId: string): void {
-    // Implement delete logic for apartments
-    console.log('Delete apartment:', apartmentId);
-    // Implement actual delete logic similar to onDeleteHotel
+    console.log("id",apartmentId);
+    this.apartmentService.deleteAppartmentlById(apartmentId).subscribe({
+      next: () => {
+        console.log('Hotel deleted successfully');
+        this.loadHotels(); 
+      },
+      error: (err) => {
+        console.error('Error deleting hotel:', err);
+      }
+    });
   }
 
   getEnabledFacilities(facilities: { [key: string]: boolean }): string[] {

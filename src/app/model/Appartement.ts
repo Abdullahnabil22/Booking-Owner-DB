@@ -53,8 +53,8 @@ export interface Apartment {
   Facilities: {
     [key: string]: boolean;
   };
-  images: string[];  // Changed from File[] to string[] to match URL strings
-  approved: boolean;  // Added for approval status
-  ownerId: string;  // Added for owner identification
-  reviews: any[];  // Added for reviews, consider creating a separate Review interface
+  images: string[]; 
+  approved: boolean;  
+  ownerId: string;  
+  reviews: any[];  
 }
