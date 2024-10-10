@@ -56,5 +56,6 @@ export interface Apartment {
   images: string[]; 
   approved: boolean;  
   ownerId: string;  
-  reviews: any[];  
+  reviews: any[]; 
+  AverageRating:Number 
 }
