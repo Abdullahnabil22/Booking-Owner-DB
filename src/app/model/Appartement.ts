@@ -1,0 +1,60 @@
+export interface Apartment {
+  _id: string;  // Added for unique identifier
+  name: {
+    en: string;
+    ar: string;
+  };
+  description: {
+    en: string;
+    ar: string;
+  };
+  subDescription: {
+    en: string;
+    ar: string;
+  };
+  phone: string;
+  location: {
+    address: {
+      en: string;
+      ar: string;
+    };
+    city: {
+      en: string;
+      ar: string;
+    };
+    country: {
+      en: string;
+      ar: string;
+    };
+  };
+  HouseRules: {
+    NoSmoking: boolean;
+    NoPets: boolean;
+    NoParties: boolean;
+    CheckInTime: string;
+    CheckOutTime: string;
+    PricePerNight: number;
+    Cancellation: {
+      Policy: {
+        en: string;
+        ar: string;
+      };
+      Refundable: boolean;
+      DeadlineDays: number;
+    };
+  };
+  Rooms: {
+    Bedrooms: number;
+    Bathrooms: number;
+    LivingRooms: number;
+    Kitchen: number;
+    Balcony: number;
+  };
+  Facilities: {
+    [key: string]: boolean;
+  };
+  images: string[];  // Changed from File[] to string[] to match URL strings
+  approved: boolean;  // Added for approval status
+  ownerId: string;  // Added for owner identification
+  reviews: any[];  // Added for reviews, consider creating a separate Review interface
+}
