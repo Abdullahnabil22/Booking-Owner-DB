@@ -4,6 +4,8 @@ import { Hotel } from '../../model/hotel';
 import { HotelService } from '../../Services/hotel/hotel.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
 import { Router } from '@angular/router';
+import { Apartment } from '../../model/Appartement';
+import { ApartmentService } from './../../Services/Apartment/apartment.service';
 
 @Component({
   selector: 'app-edit-property',
@@ -14,13 +16,16 @@ import { Router } from '@angular/router';
 })
 export class EditPropertyComponent implements OnInit {
   hotels: Hotel[] = [];
+  apartments: Apartment[] = [];
   userId: string | null = null;
-  expandedIndex: number = -1; // Add this line
+  expandedIndex: number = -1;
+  expandedApartmentIndex: number = -1;
 
   constructor(
     private hotelService: HotelService,
     private jwtService: JWTService,
-    private router: Router
+    private router: Router,
+    private apartmentService: ApartmentService
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +39,7 @@ export class EditPropertyComponent implements OnInit {
 
       if (this.userId) {
         this.loadHotels();
+        this.loadApartments();  
       } else {
         console.error('User ID not found in token.');
       }
@@ -47,7 +53,12 @@ export class EditPropertyComponent implements OnInit {
       this.hotelService.getUserHotels(this.userId).subscribe({
         next: (data: Hotel[]) => {
           this.hotels = data;
-          console.log('Fetched hotels:', this.hotels[0].location);
+          
+          if (this.hotels.length > 0) {
+            console.log('Fetched hotels:', this.hotels[0].location);
+          } else {
+            console.log('No hotels fetched');
+          }
         },
         error: (error) => {
           console.error('Error fetching hotels:', error);
@@ -56,8 +67,39 @@ export class EditPropertyComponent implements OnInit {
     }
   }
 
+  loadApartments(): void { 
+    if (this.userId) {
+      this.apartments = []; 
+      this.apartmentService.getUserAppartment(this.userId).subscribe({
+        next: (data: Apartment | Apartment[]) => {
+          if (Array.isArray(data)) {
+            this.apartments = data;
+          } else if (data && typeof data === 'object') {
+            this.apartments = [data]; 
+          } else {
+            this.apartments = [];
+          }
+          
+          console.log("Fetched apartments:", this.apartments);
+          
+          if (this.apartments.length > 0) {
+            console.log('First apartment:', this.apartments[0]);
+          } else {
+            console.log('No apartments fetched');
+          }
+        },
+        error: (error) => { 
+          console.error('Error fetching apartments:', error);
+          this.apartments = [];
+        }
+      });
+    } else {
+      console.error('User ID is null');
+      this.apartments = []; 
+    }
+  }
   onUpdateHotel(hotelId: string): void {
-    this.router.navigate([ '/edit-Hotel', hotelId]);
+    this.router.navigate(['/edit-Hotel', hotelId]);
   }
 
   onDeleteHotel(hotelId: string): void {
@@ -79,5 +121,39 @@ export class EditPropertyComponent implements OnInit {
     } else {
       this.expandedIndex = index;
     }
+  }
+
+  toggleApartmentDetails(index: number): void {
+    if (this.expandedApartmentIndex === index) {
+      this.expandedApartmentIndex = -1;
+    } else {
+      this.expandedApartmentIndex = index;
+    }
+  }
+
+  onUpdateApartment(apartmentId: string): void {
+    // Implement update logic for apartments
+    console.log('Update apartment:', apartmentId);
+    // this.router.navigate(['/edit-Apartment', apartmentId]);
+  }
+
+  onDeleteApartment(apartmentId: string): void {
+    console.log("id",apartmentId);
+    this.apartmentService.deleteAppartmentlById(apartmentId).subscribe({
+      next: () => {
+        console.log('Hotel deleted successfully');
+        this.loadHotels(); 
+      },
+      error: (err) => {
+        console.error('Error deleting hotel:', err);
+      }
+    });
+  }
+
+  getEnabledFacilities(facilities: { [key: string]: boolean }): string[] {
+    return Object.keys(facilities).filter(key => facilities[key]);
+  }
+  getFacilities(facilities: { [key: string]: boolean }): { name: string, available: boolean }[] {
+    return Object.entries(facilities).map(([name, available]) => ({ name, available }));
   }
 }
