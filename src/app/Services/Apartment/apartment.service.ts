@@ -38,6 +38,13 @@ export class ApartmentService {
     console.log('hamada appartment', hamada);
     return hamada;
   }
+  deleteAppartmentlById(apartmentId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/apartments/${apartmentId}`, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      }),
+    });
+  }
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
