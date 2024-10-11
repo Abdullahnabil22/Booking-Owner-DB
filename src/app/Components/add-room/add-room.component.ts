@@ -149,4 +149,7 @@ export class AddRoomComponent {
       console.error('Form is invalid', this.roomForm.errors);
     }
   }
+  onPrevious() {
+    this.router.navigate(['/add-property/amenities', this.hotelId]);
+  }
 }

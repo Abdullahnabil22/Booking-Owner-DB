@@ -121,9 +121,15 @@ export class AmenitiesComponent {
     for (const [groupName, groupValue] of Object.entries(formValue)) {
       formattedAmenities[groupName] = {};
       for (const [amenityName, value] of Object.entries(groupValue as object)) {
-        formattedAmenities[groupName][amenityName] = Boolean(value);
+        const capitalizedAmenityName =
+          amenityName.charAt(0).toUpperCase() + amenityName.slice(1);
+        formattedAmenities[groupName][capitalizedAmenityName] = Boolean(value);
       }
     }
     return formattedAmenities;
+  }
+
+  onPrevious() {
+    this.router.navigate(['/add-property/hotel']);
   }
 }
