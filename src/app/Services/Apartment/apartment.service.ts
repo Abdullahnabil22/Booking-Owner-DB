@@ -45,6 +45,16 @@ export class ApartmentService {
       }),
     });
   }
+  updateDepartmentById(apartmentId:string): Observable<any>{
+    return this.http.put(`${this.apiUrl}/apartments/${apartmentId}`, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }),
+        });
+  }
+  getAppartmentById(apartmentId:string): Observable<any>{
+    return this.http.get(`${this.apiUrl}/apartments/${apartmentId}`)
+  }
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();

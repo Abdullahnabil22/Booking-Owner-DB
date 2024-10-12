@@ -13,6 +13,7 @@ import { EditHotelComponent } from './Components/edit-Hotel/edit-hotel/edit-hote
 import { VisitorChartComponent } from './visitor-chart/visitor-chart.component';
 import { AmenitiesComponent } from './Components/amenities/amenities.component';
 import { AddRoomComponent } from './Components/add-room/add-room.component';
+import { EditApartmentComponent } from './edit-apartment/edit-apartment.component';
 
 
 export const routes: Routes = [
@@ -81,6 +82,11 @@ export const routes: Routes = [
       component: EditHotelComponent,
       canActivate: [userauthGuard],
   },
+  {
+    path: 'edit-Apartment/:id',
+    component: EditApartmentComponent,
+    canActivate: [userauthGuard],
+},
   {path: 'visitor-chart',
   component:VisitorChartComponent ,
   canActivate: [userauthGuard],
