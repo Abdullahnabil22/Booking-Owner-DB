@@ -132,9 +132,7 @@ export class EditPropertyComponent implements OnInit {
   }
 
   onUpdateApartment(apartmentId: string): void {
-    // Implement update logic for apartments
-    console.log('Update apartment:', apartmentId);
-    // this.router.navigate(['/edit-Apartment', apartmentId]);
+   this.router.navigate(['/edit-Apartment', apartmentId]);
   }
 
   onDeleteApartment(apartmentId: string): void {
