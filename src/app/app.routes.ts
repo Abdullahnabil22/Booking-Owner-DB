@@ -74,23 +74,17 @@ export const routes: Routes = [
         path: 'add-property/hotel/:id',
         component: AddHotelComponent,
         canActivate: [userauthGuard],
-
-    },
-    {
-      path: 'edit-Hotel/:id',
-      component: EditHotelComponent,
-      canActivate: [userauthGuard],
-  },
-  {
-    path: 'edit-Apartment/:id',
-    component: EditApartmentComponent,
-    canActivate: [userauthGuard],
-},
-  {path: 'visitor-chart',
-  component:VisitorChartComponent ,
-  canActivate: [userauthGuard],
-}
-
+      },
+      {
+        path: 'edit-Hotel/:id',
+        component: EditHotelComponent,
+        canActivate: [userauthGuard],
+      },
+      {
+        path: 'edit-Apartment/:id',
+        component: EditApartmentComponent,
+        canActivate: [userauthGuard],
+      },
     ],
   },
   { path: 'login', component: LoginComponent },
