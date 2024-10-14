@@ -98,21 +98,25 @@ export class EditPropertyComponent implements OnInit {
       this.apartments = []; 
     }
   }
+
   onUpdateHotel(hotelId: string): void {
     this.router.navigate(['/edit-Hotel', hotelId]);
   }
 
   onDeleteHotel(hotelId: string): void {
-    console.log(hotelId);
-    this.hotelService.deleteHotelById(hotelId).subscribe({
-      next: () => {
-        console.log('Hotel deleted successfully');
-        this.loadHotels(); 
-      },
-      error: (err) => {
-        console.error('Error deleting hotel:', err);
-      }
-    });
+    const confirmed = confirm('Are you sure you want to delete this hotel?');
+    if (confirmed) {
+      console.log(hotelId);
+      this.hotelService.deleteHotelById(hotelId).subscribe({
+        next: () => {
+          console.log('Hotel deleted successfully');
+          this.loadHotels(); 
+        },
+        error: (err) => {
+          console.error('Error deleting hotel:', err);
+        }
+      });
+    }
   }
 
   toggleDetails(index: number): void {
@@ -132,25 +136,29 @@ export class EditPropertyComponent implements OnInit {
   }
 
   onUpdateApartment(apartmentId: string): void {
-   this.router.navigate(['/edit-Apartment', apartmentId]);
+    this.router.navigate(['/edit-Apartment', apartmentId]);
   }
 
   onDeleteApartment(apartmentId: string): void {
-    console.log("id",apartmentId);
-    this.apartmentService.deleteAppartmentlById(apartmentId).subscribe({
-      next: () => {
-        console.log('Hotel deleted successfully');
-        this.loadHotels(); 
-      },
-      error: (err) => {
-        console.error('Error deleting hotel:', err);
-      }
-    });
+    const confirmed = confirm('Are you sure you want to delete this apartment?');
+    if (confirmed) {
+      console.log("id", apartmentId);
+      this.apartmentService.deleteAppartmentlById(apartmentId).subscribe({
+        next: () => {
+          console.log('Apartment deleted successfully');
+          this.loadApartments(); 
+        },
+        error: (err) => {
+          console.error('Error deleting apartment:', err);
+        }
+      });
+    }
   }
 
   getEnabledFacilities(facilities: { [key: string]: boolean }): string[] {
     return Object.keys(facilities).filter(key => facilities[key]);
   }
+
   getFacilities(facilities: { [key: string]: boolean }): { name: string, available: boolean }[] {
     return Object.entries(facilities).map(([name, available]) => ({ name, available }));
   }
