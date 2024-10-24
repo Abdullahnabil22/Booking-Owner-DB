@@ -120,6 +120,9 @@ export class LoginComponent implements OnInit {
           (error) => {
             this.errorMessage = 'Access denied.';
             console.error("Error during login with token:", error); 
+
+
+            
           }
         );
       }
