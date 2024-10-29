@@ -58,10 +58,10 @@ export class ChartsService {
         scales: {
           y: {
             beginAtZero: true,
-            suggestedMax: 10000,
+            suggestedMax: 1000,
             title: {
               display: true,
-              text: 'Earnings (EGP)',
+              text: 'Earnings (USD)',
             },
           },
           x: {

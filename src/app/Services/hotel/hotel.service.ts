@@ -60,37 +60,32 @@ export class HotelService {
 
   /////////////////////////// update
 
-updateHotel(updatedHotel: Hotel): Observable<Hotel> {
-  return this.http.patch<Hotel>(
-    `${this.apiUrl}/host/${updatedHotel._id}`, 
-    updatedHotel, 
-    {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      })
-    }
-  );
-}
+  updateHotel(updatedHotel: Hotel): Observable<Hotel> {
+    return this.http.patch<Hotel>(
+      `${this.apiUrl}/host/${updatedHotel._id}`,
+      updatedHotel,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }),
+      }
+    );
+  }
 
+  // Service for getting a hotel by ID
+  getHotelById(hotelId: string): Observable<any> {
+    console.log('hamadaid', hotelId);
+    const resulat = this.http.get(`${this.apiUrl}/host/${hotelId}`);
+    console.log('result', resulat);
+    return resulat;
+  }
 
-// Service for getting a hotel by ID
-getHotelById(hotelId: string): Observable<any> {
-  console.log("hamadaid",hotelId)
- const resulat= this.http.get(`${this.apiUrl}/host/${hotelId}`);
- console.log("result",resulat)
- return resulat
-}
-
-
-
-
-///////////////////////// vistor
-getVisitors(hotelId: string): Observable<any[]> {
+  getVisitors(hotelId: string): Observable<any[]> {
     const url = `${this.apiUrl}/earnings/${hotelId}`;
     console.log('Fetching visitors from:', url);
     return this.http.get<any[]>(url).pipe(
-      tap(data => console.log('Fetched visitors:', data)),
+      tap((data) => console.log('Fetched visitors:', data)),
       catchError(this.handleError)
     );
   }
@@ -99,7 +94,6 @@ getVisitors(hotelId: string): Observable<any[]> {
     console.error('An error occurred:', error);
     throw error;
   }
-
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
