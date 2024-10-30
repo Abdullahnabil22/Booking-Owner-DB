@@ -56,6 +56,19 @@ export class ReviewsComponent implements OnInit {
     this.replyInputVisible[reviewId] = !this.replyInputVisible[reviewId];
   }
 
+  // addReply(reviewId: string) {
+  //   const reply = this.replyText[reviewId];
+  //   if (reply) {
+  //     this.reviewService.addReply(reviewId, reply).subscribe(response => {
+  //       const review = this.reviews.find(r => r._id === reviewId);
+  //       if (review) {
+  //         review.replies.push({ from: 'You', message: reply });
+  //         this.replyText[reviewId] = '';
+  //       }
+  //     });
+  //   }
+  // }
+
   addReply(reviewId: string) {
     const reply = this.replyText[reviewId];
     if (reply) {
@@ -63,8 +76,10 @@ export class ReviewsComponent implements OnInit {
         const review = this.reviews.find(r => r._id === reviewId);
         if (review) {
           review.replies.push({ from: 'You', message: reply });
-          this.replyText[reviewId] = '';
+          this.replyText[reviewId] = ''; // إعادة تعيين حقل الإدخال
         }
+      }, error => {
+        console.error("Error adding reply:", error);
       });
     }
   }
