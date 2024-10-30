@@ -1,1 +1,29 @@
-<p>reviews works!</p>
+<!-- <div *ngIf="reviews.length > 0; else noReviews">
+  <h2>مراجعات الفندق</h2>
+  <ul>
+    <li *ngFor="let review of reviews">
+      <p>{{ review.comment.en }}</p>
+      <p>Rating: {{ review.rating }}</p>
+    </li>
+  </ul>
+</div>
+
+<ng-template #noReviews>
+  <p>لا توجد مراجعات متاحة لهذا الفندق.</p>
+</ng-template> -->
+
+
+
+<div *ngIf="reviews.length > 0; else noReviews">
+  <h2>مراجعات الفندق</h2>
+  <ul>
+    <li *ngFor="let review of reviews">
+      <p>{{ review.comment.en }}</p>
+      <p>Rating: {{ review.rating }}</p>
+    </li>
+  </ul>
+</div>
+
+<ng-template #noReviews>
+  <p>لا توجد مراجعات متاحة لهذا الفندق.</p>
+</ng-template>

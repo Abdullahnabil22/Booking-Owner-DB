@@ -187,12 +187,35 @@ h3 {
   margin-bottom: 5px;
 }
 
-.rating {
+/* .rating {
   display: inline-block;
   position: relative;
   font-size: 18px;
   color: #f39c12;
+} */
+
+
+.rating {
+  display: flex;
+  align-items: center;
 }
+
+.material-icons {
+  font-size: 24px;
+  color: lightgray; 
+}
+
+.material-icons.filled {
+  color: gold; 
+}
+
+
+
+
+
+
+
+
 
 .stars {
   position: absolute;

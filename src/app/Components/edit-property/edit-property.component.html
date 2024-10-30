@@ -29,10 +29,17 @@
             <td>{{ hotel.location.city.en }}, {{ hotel.location.country.en }}</td>
             <td class="price">{{ hotel.PricePerNight | currency }}</td>
             <td>
-              <div class="rating">
-                <span class="stars" [style.width.%]="hotel.AverageRating * 20"></span>
-                {{ hotel.AverageRating > 0 ? hotel.AverageRating.toFixed(1) : 'N/A' }}
-              </div>
+            
+                <div class="rating">
+                  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                    <span class="material-icons" [class.filled]="i < hotel.AverageRating">
+                      star
+                    </span>
+                  </ng-container>
+                  <span *ngIf="hotel.AverageRating > 0">{{ hotel.AverageRating.toFixed(1) }}</span>
+                  <span *ngIf="hotel.AverageRating === 0">N/A</span>
+                </div>
+            
             </td>
             <td>
               <div class="button-group">
@@ -56,6 +63,14 @@
                   </p>
                 </div>
               </div>
+              <div>
+                <button class="btn btn-primary" (click)="navigateToReviews(hotel._id)">Reviews</button>
+              </div>
+              <!-- <div class="details-column">
+                <span class="material-icons">star</span>
+                
+                <p>Reviews: {{ hotel.AverageRating || 0 }}</p> 
+              </div> -->
             </td>
           </tr>
         </ng-container>

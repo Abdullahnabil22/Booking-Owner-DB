@@ -56,6 +56,7 @@ export class EditPropertyComponent implements OnInit {
           
           if (this.hotels.length > 0) {
             console.log('Fetched hotels:', this.hotels[0].location);
+            console.log("hotel",this.hotels)
           } else {
             console.log('No hotels fetched');
           }
@@ -101,6 +102,9 @@ export class EditPropertyComponent implements OnInit {
 
   onUpdateHotel(hotelId: string): void {
     this.router.navigate(['/edit-Hotel', hotelId]);
+  }
+  navigateToReviews(hotelId: string): void {
+    this.router.navigate(['/reviews', hotelId]);
   }
 
   onDeleteHotel(hotelId: string): void {
