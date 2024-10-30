@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ReviewsService } from '../../Services/reviews/reviews.service';
+import { UserService } from '../../Services/user/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { Review } from '../../model/reviews'; 
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // استيراد FormsModule
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-reviews',
   standalone: true,
-  imports: [CommonModule, FormsModule], // إضافة FormsModule هنا
+  imports: [CommonModule, FormsModule],
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.css']
 })
@@ -17,8 +18,13 @@ export class ReviewsComponent implements OnInit {
   reviews: Review[] = [];
   replyInputVisible: { [key: string]: boolean } = {};
   replyText: { [key: string]: string } = {};
+  userNames: { [key: string]: string } = {}; // لتخزين أسماء المستخدمين
 
-  constructor(private route: ActivatedRoute, private reviewService: ReviewsService) {}
+  constructor(
+    private route: ActivatedRoute, 
+    private reviewService: ReviewsService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -31,8 +37,18 @@ export class ReviewsComponent implements OnInit {
 
   loadReviews(hotelId: string): void {
     this.reviewService.getReviewsByHotelId(hotelId).subscribe(reviews => {
-      console.log("Received reviews:", reviews);
       this.reviews = reviews;
+      this.loadUserNames(); 
+    });
+  }
+
+  loadUserNames(): void {
+    this.reviews.forEach(review => {
+      this.userService.getUserById(review.userId).subscribe(user => {
+        if (user && user.userName) {
+          this.userNames[review.userId] = user.userName
+        }
+      });
     });
   }
 
