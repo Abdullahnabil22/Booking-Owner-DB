@@ -12,10 +12,14 @@ export class ReviewsService {
   constructor(private http: HttpClient) {}
 
   getReviewsByHotelId(hotelId: string): Observable<Review[]> {
-    return this.http.get<Review[]>(`${this.apiUrl}/hotel/${hotelId}`);
+    const result= this.http.get<Review[]>(`${this.apiUrl}/hotel/${hotelId}`);
+    console.log("result",result)
+    console.log("Review")
+    return result
   }
 
   addReply(reviewId: string, reply: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/${reviewId}/replies`, { message: reply });
   }
+
 }

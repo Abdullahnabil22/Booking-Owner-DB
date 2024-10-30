@@ -1,27 +1,27 @@
 .review-list {
   display: flex;
-  flex-wrap: wrap; /* يسمح بتغليف العناصر */
-  gap: 15px; /* مسافة بين البطاقات */
+  flex-wrap: wrap;
+  gap: 15px; 
 }
 
 .review-card {
-  border: 1px solid #e0e0e0; /* حدود خفيفة حول كل مراجعة */
-  border-radius: 5px; /* زوايا دائرية */
-  padding: 10px; /* حشوة داخلية أقل */
-  background-color: #ffffff; /* لون خلفية أبيض */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* ظل خفيف */
-  width: calc(48% - 10px); /* عرض البطاقة ليكون 48% مع مسافة */
-  transition: background-color 0.3s; /* تأثير انتقال عند تغيير الخلفية */
+  border: 1px solid #e0e0e0; 
+  border-radius: 5px;
+  padding: 10px; 
+  background-color: #ffffff; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  width: calc(48% - 10px); 
+  transition: background-color 0.3s; 
 }
 
 .review-user {
-  font-weight: bold; /* جعل اسم المستخدم بارز */
-  color: #2c3e50; /* لون اسم المستخدم */
+  font-weight: bold; 
+  color: #2c3e50; 
 }
 
 .review-comment {
-  font-size: 14px; /* حجم خط أصغر للتعليق */
-  margin: 0 0 10px; /* مسافة أسفل التعليق */
+  font-size: 14px;
+  margin: 0 0 10px; 
 }
 
 .review-rating {
@@ -35,7 +35,7 @@
 }
 
 .rating-stars .filled {
-  color: orangered; /* لون النجوم المملوءة */
+  color: #f1c40f; /* لون النجوم المملوءة */
 }
 
 .reply-section {
@@ -72,16 +72,16 @@
 }
 
 .reply-input {
-  width: 100%; /* عرض كامل */
-  height: 50px; /* ارتفاع محدد أقل */
-  border: 1px solid #ccc; /* حدود خفيفة */
-  border-radius: 5px; /* زوايا دائرية */
-  padding: 10px; /* حشوة داخلية */
-  resize: none; /* منع تغيير حجم textarea */
+  width: 100%;
+  height: 50px; 
+  border: 1px solid #ccc;
+  border-radius: 5px; 
+  padding: 10px; 
+  resize: none;
 }
 
 .reply-list {
-  list-style-type: none; /* إزالة النقاط من قائمة الردود */
-  padding: 0; /* إزالة الحشوة */
-  margin-top: 10px; /* مسافة فوق قائمة الردود */
+  list-style-type: none; 
+  padding: 0; 
+  margin-top: 10px;
 }
