@@ -1,0 +1,85 @@
+.review-list {
+  display: flex;
+  flex-direction: column; /* عرض العناصر في عمود */
+  gap: 15px; /* مسافة بين البطاقات */
+}
+
+.review-card {
+  border: 1px solid #e0e0e0; /* حدود خفيفة حول كل مراجعة */
+  border-radius: 5px; /* زوايا دائرية */
+  padding: 15px; /* حشوة داخلية */
+  background-color: #ffffff; /* لون خلفية أبيض */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+}
+
+.review-user {
+  font-weight: bold; /* جعل اسم المستخدم بارز */
+  color: #2c3e50; /* لون اسم المستخدم */
+}
+
+.review-comment {
+  font-size: 16px; /* حجم خط أكبر للتعليق */
+  margin: 0 0 10px; /* مسافة أسفل التعليق */
+}
+
+.review-rating {
+  font-size: 14px; /* حجم خط أصغر للتقييم */
+  color: #555; /* لون رمادي للتقييم */
+}
+
+.rating-stars {
+  display: inline-block; /* عرض النجوم في صف */
+  color: #e0e0e0; /* لون النجوم الفارغة */
+}
+
+.rating-stars .filled {
+  color: orangered; /* لون النجوم المملوءة */
+}
+
+.reply-section {
+  display: flex; /* استخدام flexbox لتنسيق الأزرار وtextarea */
+  flex-direction: column; /* عرض العناصر في عمود */
+  margin-top: 10px; /* مسافة فوق قسم الردود */
+}
+
+.reply-button {
+  background-color: #3498db; /* لون زر "Add Reply" */
+  color: white; /* لون النص */
+  border: none; /* إزالة الحدود */
+  border-radius: 5px; /* زوايا دائرية */
+  padding: 10px 15px; /* حشوة داخلية */
+  cursor: pointer; /* تغيير المؤشر عند التمرير فوق الزر */
+  margin-bottom: 10px; /* مسافة أسفل الزر */
+  align-self: flex-end; /* محاذاة الزر إلى اليمين */
+}
+
+.submit-button {
+  background-color: #3498db; /* لون زر "Submit" */
+  color: white; /* لون النص */
+  border: none; /* إزالة الحدود */
+  border-radius: 5px; /* زوايا دائرية */
+  padding: 10px 15px; /* حشوة داخلية */
+  cursor: pointer; /* تغيير المؤشر عند التمرير فوق الزر */
+  align-self: flex-end; /* محاذاة الزر إلى اليمين */
+}
+
+.reply-input-container {
+  display: flex; /* استخدام flexbox لتنسيق textarea وزر الإرسال */
+  flex-direction: column; /* عرض العناصر في عمود */
+  margin-top: 5px; /* مسافة فوق textarea */
+}
+
+.reply-input {
+  width: 100%; /* عرض كامل */
+  height: 60px; /* ارتفاع محدد */
+  border: 1px solid #ccc; /* حدود خفيفة */
+  border-radius: 5px; /* زوايا دائرية */
+  padding: 10px; /* حشوة داخلية */
+  resize: none; /* منع تغيير حجم textarea */
+}
+
+.reply-list {
+  list-style-type: none; /* إزالة النقاط من قائمة الردود */
+  padding: 0; /* إزالة الحشوة */
+  margin-top: 10px; /* مسافة فوق قائمة الردود */
+}

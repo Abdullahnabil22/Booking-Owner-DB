@@ -1,27 +1,29 @@
-<!-- <div *ngIf="reviews.length > 0; else noReviews">
-  <h2>مراجعات الفندق</h2>
-  <ul>
-    <li *ngFor="let review of reviews">
-      <p>{{ review.comment.en }}</p>
-      <p>Rating: {{ review.rating }}</p>
-    </li>
-  </ul>
-</div>
-
-<ng-template #noReviews>
-  <p>لا توجد مراجعات متاحة لهذا الفندق.</p>
-</ng-template> -->
-
-
-
 <div *ngIf="reviews.length > 0; else noReviews">
-  <h2>مراجعات الفندق</h2>
-  <ul>
-    <li *ngFor="let review of reviews">
-      <p>{{ review.comment.en }}</p>
-      <p>Rating: {{ review.rating }}</p>
-    </li>
-  </ul>
+  <div class="review-list">
+    <div *ngFor="let review of reviews" class="review-card">
+      <p class="review-user">{{ review.userId }}</p>
+      <p class="review-comment">{{ review.comment.en }}</p>
+      <p class="review-rating">Rating: <span class="rating-value">{{ review.rating }}</span></p>
+      <div class="rating-stars" [style.width]="(review.rating / 10) * 100 + '%'">
+        <span class="material-icons filled" *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" 
+              [class.filled]="i < review.rating / 2">
+          star
+        </span>
+      </div>
+      <div class="reply-section">
+        <button class="reply-button" (click)="showReplyInput(review._id)">Add Reply</button>
+        <div *ngIf="replyInputVisible[review._id]" class="reply-input-container">
+          <textarea [(ngModel)]="replyText[review._id]" placeholder="Write your reply..." class="reply-input"></textarea>
+          <button class="submit-button" (click)="addReply(review._id)">Submit</button>
+        </div>
+      </div>
+      <ul class="reply-list">
+        <li *ngFor="let reply of review.replies">
+          <strong>{{ reply.from }}:</strong> {{ reply.message }}
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <ng-template #noReviews>

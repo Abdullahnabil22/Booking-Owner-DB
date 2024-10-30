@@ -1,5 +1,6 @@
 
 export interface Review {
+  _id: string;
   rating: number; // Rating given by the user
   comment: {
     en: string; // Comment in English
