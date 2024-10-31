@@ -1,0 +1,87 @@
+.review-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; 
+}
+
+.review-card {
+  border: 1px solid #e0e0e0; 
+  border-radius: 5px;
+  padding: 10px; 
+  background-color: #ffffff; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  width: calc(48% - 10px); 
+  transition: background-color 0.3s; 
+}
+
+.review-user {
+  font-weight: bold; 
+  color: #2c3e50; 
+}
+
+.review-comment {
+  font-size: 14px;
+  margin: 0 0 10px; 
+}
+
+.review-rating {
+  font-size: 12px; /* حجم خط أصغر للتقييم */
+  color: #555; /* لون رمادي للتقييم */
+}
+
+.rating-stars {
+  display: inline-block; /* عرض النجوم في صف */
+  color: #e0e0e0; /* لون النجوم الفارغة */
+}
+
+.rating-stars .filled {
+  color: #f1c40f; /* لون النجوم المملوءة */
+}
+
+.reply-section {
+  display: flex; /* استخدام flexbox لتنسيق الأزرار وtextarea */
+  flex-direction: column; /* عرض العناصر في عمود */
+  margin-top: 10px; /* مسافة فوق قسم الردود */
+}
+
+.reply-button {
+  background-color: #3498db; /* لون زر "Add Reply" */
+  color: white; /* لون النص */
+  border: none; /* إزالة الحدود */
+  border-radius: 5px; /* زوايا دائرية */
+  padding: 8px 12px; /* حشوة داخلية أقل */
+  cursor: pointer; /* تغيير المؤشر عند التمرير فوق الزر */
+  margin-bottom: 10px; /* مسافة أسفل الزر */
+  align-self: flex-end; /* محاذاة الزر إلى اليمين */
+}
+
+.submit-button {
+  background-color: #3498db; /* لون زر "Submit" */
+  color: white; /* لون النص */
+  border: none; /* إزالة الحدود */
+  border-radius: 5px; /* زوايا دائرية */
+  padding: 8px 12px; /* حشوة داخلية أقل */
+  cursor: pointer; /* تغيير المؤشر عند التمرير فوق الزر */
+  align-self: flex-end; /* محاذاة الزر إلى اليمين */
+}
+
+.reply-input-container {
+  display: flex; /* استخدام flexbox لتنسيق textarea وزر الإرسال */
+  flex-direction: column; /* عرض العناصر في عمود */
+  margin-top: 5px; /* مسافة فوق textarea */
+}
+
+.reply-input {
+  width: 100%;
+  height: 50px; 
+  border: 1px solid #ccc;
+  border-radius: 5px; 
+  padding: 10px; 
+  resize: none;
+}
+
+.reply-list {
+  list-style-type: none; 
+  padding: 0; 
+  margin-top: 10px;
+}

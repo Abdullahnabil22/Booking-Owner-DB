@@ -61,7 +61,7 @@ export const routes: Routes = [
         canActivate: [userauthGuard],
       },
       {
-        path: 'reviews',
+        path: 'reviews/:id', 
         component: ReviewsComponent,
         canActivate: [userauthGuard],
       },
