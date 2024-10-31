@@ -28,7 +28,10 @@
         </div>
 
         <!-- Messages list -->
-        <div class="flex-grow-1 overflow-auto p-3 shadow-lg custom-chat-scroll">
+        <div
+          #messagesContainer
+          class="flex-grow-1 overflow-auto p-3 shadow-lg custom-chat-scroll"
+        >
           <div
             *ngFor="let message of selectedChat.messages"
             [ngClass]="{
