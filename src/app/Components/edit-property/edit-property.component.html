@@ -72,10 +72,10 @@
 
                 <div class="details-column">
                   <p><strong>Contact:</strong> {{ hotel.phone }}</p>
-                  <button *ngIf="!hotel.approved" (click)="navigateToBookingList(hotel._id)" class="approval-status">
+                  <button *ngIf="!hotel.approved"  class="approval-status">
                     Not Approved
                   </button>
-                  <p *ngIf="hotel.approved" class="approval-status">
+                  <p *ngIf="hotel.approved" (click)="navigateToBookingList(hotel._id)" class="approval-status">
                     Approved
                   </p>
                 </div>
