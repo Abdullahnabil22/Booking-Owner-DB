@@ -166,4 +166,7 @@ export class EditPropertyComponent implements OnInit {
   getFacilities(facilities: { [key: string]: boolean }): { name: string, available: boolean }[] {
     return Object.entries(facilities).map(([name, available]) => ({ name, available }));
   }
+  navigateToBookingList(hotelId: string) {
+    this.router.navigate(['/BookingList', hotelId]);
+  }
 }

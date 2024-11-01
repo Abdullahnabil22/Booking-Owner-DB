@@ -18,7 +18,7 @@ export class ReviewsComponent implements OnInit {
   reviews: Review[] = [];
   replyInputVisible: { [key: string]: boolean } = {};
   replyText: { [key: string]: string } = {};
-  userNames: { [key: string]: string } = {}; // لتخزين أسماء المستخدمين
+  userNames: { [key: string]: string } = {};
 
   constructor(
     private route: ActivatedRoute, 
@@ -38,19 +38,19 @@ export class ReviewsComponent implements OnInit {
   loadReviews(hotelId: string): void {
     this.reviewService.getReviewsByHotelId(hotelId).subscribe(reviews => {
       this.reviews = reviews;
-      this.loadUserNames(); 
+      // this.loadUserNames(); 
     });
   }
 
-  loadUserNames(): void {
-    this.reviews.forEach(review => {
-      this.userService.getUserById(review.userId).subscribe(user => {
-        if (user && user.userName) {
-          this.userNames[review.userId] = user.userName
-        }
-      });
-    });
-  }
+  // loadUserNames(): void {
+  //   this.reviews.forEach(review => {
+  //     this.userService.getUserById(review.userId).subscribe(user => {
+  //       if (user && user.userName) {
+  //         this.userNames[review.userId] = user.userName
+  //       }
+  //     });
+  //   });
+  // }
 
   showReplyInput(reviewId: string) {
     this.replyInputVisible[reviewId] = !this.replyInputVisible[reviewId];
@@ -76,7 +76,7 @@ export class ReviewsComponent implements OnInit {
         const review = this.reviews.find(r => r._id === reviewId);
         if (review) {
           review.replies.push({ from: 'You', message: reply });
-          this.replyText[reviewId] = ''; // إعادة تعيين حقل الإدخال
+          this.replyText[reviewId] = ''; 
         }
       }, error => {
         console.error("Error adding reply:", error);
