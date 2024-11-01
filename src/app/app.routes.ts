@@ -13,6 +13,7 @@ import { EditHotelComponent } from './Components/edit-Hotel/edit-hotel/edit-hote
 import { AmenitiesComponent } from './Components/amenities/amenities.component';
 import { AddRoomComponent } from './Components/add-room/add-room.component';
 import { EditApartmentComponent } from './edit-apartment/edit-apartment.component';
+import { BookingListComponent } from './Components/booking-list/booking-list.component';
 
 export const routes: Routes = [
   {
@@ -83,6 +84,11 @@ export const routes: Routes = [
       {
         path: 'edit-Apartment/:id',
         component: EditApartmentComponent,
+        canActivate: [userauthGuard],
+      },
+      {
+        path: 'BookingList/:id',
+        component: BookingListComponent,
         canActivate: [userauthGuard],
       },
     ],

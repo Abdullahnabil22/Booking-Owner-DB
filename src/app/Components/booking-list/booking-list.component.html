@@ -1,0 +1,17 @@
+<div *ngFor="let booking of bookings" class="booking-card">
+    <div class="card-header">
+      <p class="card-title">Booking Details</p>
+    </div>
+    <div class="card-content">
+      <div class="info-column">
+        <p><strong>Email:</strong> {{ booking.email }}</p>
+        <p><strong>Check-in Date:</strong> {{ booking.check_in_date | date: 'short' }}</p>
+        <p><strong>Check-out Date:</strong> {{ booking.check_out_date | date: 'short' }}</p>
+      </div>
+      <div class="info-row two-columns">
+        <p><strong>Booking Date:</strong> {{ booking.booking_date | date: 'short' }}</p>
+        <p><strong>Amount:</strong> {{ booking.payment.amount }} {{ booking.payment.coin }}</p>
+      </div>
+    </div>
+  </div>
+  
