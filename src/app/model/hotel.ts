@@ -50,4 +50,5 @@ export interface Hotel {
   phone: string | number; 
   CreatedAt: string;
   UpdatedAt: string; 
+  isDisabled?: boolean;
 }
