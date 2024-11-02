@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Hotel } from '../../model/hotel';
 import { HotelService } from '../../Services/hotel/hotel.service';
@@ -25,7 +25,8 @@ export class EditPropertyComponent implements OnInit {
     private hotelService: HotelService,
     private jwtService: JWTService,
     private router: Router,
-    private apartmentService: ApartmentService
+    private apartmentService: ApartmentService,
+    private cdr: ChangeDetectorRef // إضافة ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -53,13 +54,7 @@ export class EditPropertyComponent implements OnInit {
       this.hotelService.getUserHotels(this.userId).subscribe({
         next: (data: Hotel[]) => {
           this.hotels = data;
-          
-          if (this.hotels.length > 0) {
-            console.log('Fetched hotels:', this.hotels[0].location);
-            console.log("hotel",this.hotels)
-          } else {
-            console.log('No hotels fetched');
-          }
+          console.log('Fetched hotels:', this.hotels);
         },
         error: (error) => {
           console.error('Error fetching hotels:', error);
@@ -80,14 +75,7 @@ export class EditPropertyComponent implements OnInit {
           } else {
             this.apartments = [];
           }
-          
           console.log("Fetched apartments:", this.apartments);
-          
-          if (this.apartments.length > 0) {
-            console.log('First apartment:', this.apartments[0]);
-          } else {
-            console.log('No apartments fetched');
-          }
         },
         error: (error) => { 
           console.error('Error fetching apartments:', error);
@@ -103,60 +91,42 @@ export class EditPropertyComponent implements OnInit {
   onUpdateHotel(hotelId: string): void {
     this.router.navigate(['/edit-Hotel', hotelId]);
   }
+
   navigateToReviews(hotelId: string): void {
     this.router.navigate(['/reviews', hotelId]);
   }
 
-  onDeleteHotel(hotelId: string): void {
-    const confirmed = confirm('Are you sure you want to delete this hotel?');
-    if (confirmed) {
-      console.log(hotelId);
-      this.hotelService.deleteHotelById(hotelId).subscribe({
-        next: () => {
-          console.log('Hotel deleted successfully');
-          this.loadHotels(); 
-        },
-        error: (err) => {
-          console.error('Error deleting hotel:', err);
-        }
-      });
-    }
+  onDeleteHotel(hotelId: string): void {     
+    const confirmed = confirm('Are you sure you want to disable this hotel?');     
+    if (confirmed) {       
+      const hotel = this.hotels.find(h => h._id === hotelId); 
+      if (hotel) {         
+        this.hotelService.disableHotelById(hotelId).subscribe({
+          next: (response) => {
+            console.log('API Response:', response);
+            hotel.isDisabled = true; 
+            console.log(`Hotel with ID ${hotelId} is now disabled.`); 
+            this.hotels = [...this.hotels]; // تحديث المصفوفة
+            this.cdr.detectChanges(); // تحديث واجهة المستخدم
+          },
+          error: (err) => {
+            console.error('Error disabling hotel:', err);
+          }
+        });
+      } 
+    } 
   }
 
   toggleDetails(index: number): void {
-    if (this.expandedIndex === index) {
-      this.expandedIndex = -1;
-    } else {
-      this.expandedIndex = index;
-    }
+    this.expandedIndex = this.expandedIndex === index ? -1 : index;
   }
 
   toggleApartmentDetails(index: number): void {
-    if (this.expandedApartmentIndex === index) {
-      this.expandedApartmentIndex = -1;
-    } else {
-      this.expandedApartmentIndex = index;
-    }
+    this.expandedApartmentIndex = this.expandedApartmentIndex === index ? -1 : index;
   }
 
   onUpdateApartment(apartmentId: string): void {
     this.router.navigate(['/edit-Apartment', apartmentId]);
-  }
-
-  onDeleteApartment(apartmentId: string): void {
-    const confirmed = confirm('Are you sure you want to delete this apartment?');
-    if (confirmed) {
-      console.log("id", apartmentId);
-      this.apartmentService.deleteAppartmentlById(apartmentId).subscribe({
-        next: () => {
-          console.log('Apartment deleted successfully');
-          this.loadApartments(); 
-        },
-        error: (err) => {
-          console.error('Error deleting apartment:', err);
-        }
-      });
-    }
   }
 
   getEnabledFacilities(facilities: { [key: string]: boolean }): string[] {
@@ -166,6 +136,7 @@ export class EditPropertyComponent implements OnInit {
   getFacilities(facilities: { [key: string]: boolean }): { name: string, available: boolean }[] {
     return Object.entries(facilities).map(([name, available]) => ({ name, available }));
   }
+
   navigateToBookingList(hotelId: string) {
     this.router.navigate(['/BookingList', hotelId]);
   }

@@ -38,13 +38,13 @@ export class ApartmentService {
     console.log('hamada appartment', hamada);
     return hamada;
   }
-  deleteAppartmentlById(apartmentId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/apartments/${apartmentId}`, {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      }),
-    });
-  }
+  // deleteAppartmentlById(apartmentId: string): Observable<any> {
+  //   return this.http.delete(`${this.apiUrl}/apartments/${apartmentId}`, {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //     }),
+  //   });
+  // }
   updateDepartmentById(apartmentId:string): Observable<any>{
     return this.http.put(`${this.apiUrl}/apartments/${apartmentId}`, {
       headers: new HttpHeaders({

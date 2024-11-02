@@ -50,14 +50,22 @@ export class HotelService {
   // }
 
   /////////////////////// delethotelbyid
-  deleteHotelById(hotelId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/host/${hotelId}`, {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      }),
-    });
+  // deleteHotelById(hotelId: string): Observable<any> {
+  //   return this.http.delete(`${this.apiUrl}/host/${hotelId}`, {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //     }),
+  //   });
+  // }
+  // disableHotelById(hotelId: string): Observable<void> {
+  //   return this.http.patch<void>(`${this.apiUrl}/host/${hotelId}/disable`, { isDisabled: true });
+  // }
+  disableHotelById(hotelId: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/host/disable/${hotelId}`, { isDisabled: true }).pipe(
+      tap(response => console.log('Disable response:', response)) 
+    );
   }
-
+  
   /////////////////////////// update
 
   updateHotel(updatedHotel: Hotel): Observable<Hotel> {
