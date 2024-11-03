@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import { JWTService } from '../JWT/jwt.service';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -25,12 +25,10 @@ export class ApartmentService {
     }
     throw new Error('No token found');
   }
-  
+
   getUserAppartment(userId: string): Observable<any> {
     console.log('Fetching hotels for user:', userId);
     const hamada = this.http.get(`${this.apiUrl}/apartments/owner/${userId}`, {
-  
-
       headers: new HttpHeaders({
         Authorization: ` ${localStorage.getItem('token')}`,
       }),
@@ -45,15 +43,15 @@ export class ApartmentService {
   //     }),
   //   });
   // }
-  updateDepartmentById(apartmentId:string): Observable<any>{
+  updateDepartmentById(apartmentId: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/apartments/${apartmentId}`, {
       headers: new HttpHeaders({
         Authorization: `Bearer ${localStorage.getItem('token')}`,
-        }),
-        });
+      }),
+    });
   }
-  getAppartmentById(apartmentId:string): Observable<any>{
-    return this.http.get(`${this.apiUrl}/apartments/${apartmentId}`)
+  getAppartmentById(apartmentId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/apartments/${apartmentId}`);
   }
 
   uploadImage(file: File): Observable<string> {
