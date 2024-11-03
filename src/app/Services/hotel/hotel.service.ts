@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { JWTService } from '../JWT/jwt.service';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { Hotel } from '../../model/hotel';
@@ -50,12 +50,22 @@ export class HotelService {
   // }
 
   /////////////////////// delethotelbyid
-  deleteHotelById(hotelId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/host/${hotelId}`, {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      }),
-    });
+  // deleteHotelById(hotelId: string): Observable<any> {
+  //   return this.http.delete(`${this.apiUrl}/host/${hotelId}`, {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //     }),
+  //   });
+  // }
+  // disableHotelById(hotelId: string): Observable<void> {
+  //   return this.http.patch<void>(`${this.apiUrl}/host/${hotelId}/disable`, { isDisabled: true });
+  // }
+  disableHotelById(hotelId: string): Observable<void> {
+    return this.http
+      .patch<void>(`${this.apiUrl}/host/disable/${hotelId}`, {
+        isDisabled: true,
+      })
+      .pipe(tap((response) => console.log('Disable response:', response)));
   }
 
   /////////////////////////// update
@@ -80,13 +90,19 @@ export class HotelService {
     console.log('result', resulat);
     return resulat;
   }
-  ///////////////////////// vistor
+
   getVisitors(hotelId: string): Observable<any[]> {
-    const url = `${this.apiUrl}/host/visitors/${hotelId}`;
+    const url = `${this.apiUrl}/earnings/${hotelId}`;
     console.log('Fetching visitors from:', url);
-    return this.http
-      .get<any[]>(url)
-      .pipe(tap((data) => console.log('Fetched visitors:', data)));
+    return this.http.get<any[]>(url).pipe(
+      tap((data) => console.log('Fetched visitors:', data)),
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: any): Observable<never> {
+    console.error('An error occurred:', error);
+    throw error;
   }
 
   uploadImage(file: File): Observable<string> {

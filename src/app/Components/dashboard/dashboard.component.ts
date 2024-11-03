@@ -5,26 +5,42 @@ import { JWTService } from '../../Services/JWT/jwt.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Chart } from 'chart.js';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsService } from '../../Services/chart/charts.service';
+import { OwnerService } from '../../Services/owner/owner.service';
+import { PayoutServiceService } from '../../Services/payoutService/payout-service.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatIconModule, RouterModule, CommonModule, FormsModule],
+  imports: [
+    MatIconModule,
+    RouterModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
-  @ViewChild('earningsChart') chartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('earningsChart')
+  earningsChartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('membersChart') membersChartCanvas!: ElementRef<HTMLCanvasElement>;
 
   userDetails: any;
-  chart!: Chart;
+  earningsChart!: Chart;
   ownerId: string = '';
-
+  membersChart!: Chart;
+  totalFunds: number = 0;
+  currentBalance: number = 0;
+  showPayoutForm = false;
+  paypalEmail = '';
   constructor(
     private chartService: ChartsService,
     private userService: UserService,
-    private jwtService: JWTService
+    private jwtService: JWTService,
+    private ownerService: OwnerService,
+    private payoutService: PayoutServiceService
   ) {}
 
   ngOnInit() {
@@ -34,6 +50,15 @@ export class DashboardComponent {
     console.log('Owner ID used for fetching data:', this.ownerId);
     this.fetchUserDetails();
     this.fetchChartData();
+    this.ownerService.getOwnerBalance(this.ownerId).subscribe((data) => {
+      if (data) {
+        console.log(data);
+        this.currentBalance = Math.round(data?.current_balance);
+        this.totalFunds = Math.round(data?.total_earned);
+      } else {
+        this.currentBalance = 0;
+      }
+    });
   }
 
   fetchUserDetails() {
@@ -52,11 +77,18 @@ export class DashboardComponent {
     this.chartService.getEarningsData(this.ownerId).subscribe(
       (data: any) => {
         console.log('Received chart data:', data);
-        if (this.chart) {
-          this.chart.destroy();
+        if (this.earningsChart) {
+          this.earningsChart.destroy();
         }
-        this.chart = this.chartService.createChart(
-          this.chartCanvas.nativeElement,
+        if (this.membersChart) {
+          this.membersChart.destroy();
+        }
+        this.earningsChart = this.chartService.createChart(
+          this.earningsChartCanvas.nativeElement,
+          data
+        );
+        this.membersChart = this.chartService.createDonutChart(
+          this.membersChartCanvas.nativeElement,
           data
         );
       },
@@ -64,5 +96,24 @@ export class DashboardComponent {
         console.error('Error fetching chart data:', error);
       }
     );
+  }
+  requestPayout() {
+    if (!this.paypalEmail || this.totalFunds <= 0) return;
+
+    this.payoutService
+      .requestPayout({
+        owner_id: this.ownerId,
+        amount: this.totalFunds,
+        paypalEmail: this.paypalEmail,
+      })
+      .subscribe(
+        (response) => {
+          console.log('Payout requested successfully:', response);
+          this.showPayoutForm = false;
+        },
+        (error) => {
+          console.error('Error requesting payout:', error);
+        }
+      );
   }
 }

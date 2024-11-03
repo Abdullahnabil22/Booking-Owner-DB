@@ -1,26 +1,76 @@
-<div *ngIf="hotels.length > 0; else noHotels" class="hotel-list">
-  <div *ngFor="let hotel of hotels" class="hotel-card">
-    <img *ngIf="hotel.images.length > 0" [src]="hotel.images[0]" alt="{{ hotel.name.en }}" class="hotel-image"/>
-    <div class="hotel-details">
-      <h3>{{ hotel.name.en }}</h3>
-      <p class="sub-description">{{ hotel.subDescription.en }}</p>
-      <p class="description">{{ hotel.description.en }}</p>
-      <p>Location: {{ hotel.location.Address.en }}, {{ hotel.location.city.en }}, {{ hotel.location.country.en }}</p>
-      <p class="price">Price per night: {{ hotel.PricePerNight | currency }}</p>
-      <p>Average Rating: {{ hotel.AverageRating > 0 ? hotel.AverageRating : 'Not Rated Yet' }}</p>
-      <p>Check-in: {{ hotel.CheckInTime }}, Check-out: {{ hotel.CheckOutTime }}</p>
-      <p *ngIf="hotel.approved" class="approval-status approved">This hotel is approved.</p>
-      <p *ngIf="!hotel.approved" class="approval-status not-approved">This hotel is not approved.</p>
-      <p>Contact: {{ hotel.phone }}</p>
-      <p>ID: {{ hotel._id }}</p>
-      <div class="button-group">
-        <button class="btn btn-primary" (click)="onUpdateHotel(hotel._id)">Update</button>
-        <button class="btn btn-danger" (click)="onDeleteHotel(hotel._id)">Delete</button>
-      </div>
-    </div>
+<div class="container">
+  <h2 class="Apartments">Property</h2>
+  
+  <div *ngIf="hotels.length > 0" class="property-list">
+    <table class="property-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Location</th>
+          <th>Price per Night</th>
+          <th>Rating</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let hotel of hotels; let i = index">
+        
+          <tr *ngIf="!hotel.isDisabled" (click)="toggleDetails(i)" [class.expanded]="expandedIndex === i">
+            <td>
+              <div class="property-card">
+                <img *ngIf="hotel.images.length > 0" [src]="hotel.images[0]" alt="{{ hotel.name.en }}" class="property-image"/>
+                <div>
+                  <h3>{{ hotel.name.en }}</h3>
+                  <p class="sub-description">{{ hotel.subDescription.en }}</p>
+                </div>
+              </div>
+            </td>
+            <td>{{ hotel.location.city.en }}, {{ hotel.location.country.en }}</td>
+            <td class="price">{{ hotel.PricePerNight | currency }}</td>
+            <td>
+              <div class="rating">
+                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                  <span class="material-icons" [class.filled]="i < hotel.AverageRating">
+                    star
+                  </span>
+                </ng-container>
+                <span *ngIf="hotel.AverageRating > 0">{{ hotel.AverageRating.toFixed(1) }}</span>
+                <span *ngIf="hotel.AverageRating === 0">N/A</span>
+              </div>
+            </td>
+            <td>
+              <div class="button-group">
+                <button class="btn btn-primary" (click)="onUpdateHotel(hotel._id); $event.stopPropagation()" [disabled]="hotel.isDisabled">Update</button>
+                <button class="btn btn-danger" (click)="onDeleteHotel(hotel._id);" [disabled]="hotel.isDisabled">Delete</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="expandedIndex === i" class="details-row">
+            <td colspan="5">
+              <div class="property-details">
+                <div class="details-column">
+                  <p><strong>Description:</strong> {{ hotel.description.en }}</p>
+                  <p><strong>Address:</strong> {{ hotel.location.Address.en }}</p>
+                  <p><strong>Check-in:</strong> {{ hotel.CheckInTime }} | <strong>Check-out:</strong> {{ hotel.CheckOutTime }}</p>
+                </div>
+                <div class="details-column">
+                  <p><strong>Contact:</strong> {{ hotel.phone }}</p>
+                  <p class="approval-status" [class.approved]="hotel.approved">
+                    {{ hotel.approved ? 'Approved' : 'Not Approved' }}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <button class="btn btn-primary" (click)="navigateToReviews(hotel._id)">Reviews</button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
   </div>
-</div>
 
-<ng-template #noHotels>
-  <p class="no-hotels-message">No hotels found for this user.</p>
-</ng-template>
+  <ng-template #noProperties>
+    <p class="no-properties-message">No properties found for this user.</p>
+  </ng-template>
+</div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 import { JWTService } from '../JWT/jwt.service';
 
@@ -48,7 +48,7 @@ export class MessageService {
         groupInfo = {
           type: 'Hotel',
           id: groupKey,
-          name: message.hostId.name || 'Unknown Host',
+          name: message.hostId.name?.en || 'Unknown Host',
           sender: message.sender.userName,
           receiver: message.receiver.userName,
         };

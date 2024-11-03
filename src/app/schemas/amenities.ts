@@ -45,7 +45,6 @@ export const mediaAndTechnologyAmenities: string[] = [
   'WiFi',
   'Mp3 Player',
   'Telephone',
-  'Wifi',
   'Computer',
   'Game Console',
   'VideoGames',
@@ -142,6 +141,5 @@ export const facilitiesAmenities: string[] = [
   'Fitness Center',
   'Yoga',
   'Massage',
-  'Pool',
   'Garden',
 ];

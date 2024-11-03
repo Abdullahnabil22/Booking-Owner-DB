@@ -10,10 +10,10 @@ import { AddApartmentComponent } from './Components/add-apartment/add-apartment.
 import { MainlayoutComponent } from './Components/mainlayout/mainlayout.component';
 import { userauthGuard } from './Guards/userauth.guard';
 import { EditHotelComponent } from './Components/edit-Hotel/edit-hotel/edit-hotel.component';
-import { VisitorChartComponent } from './visitor-chart/visitor-chart.component';
 import { AmenitiesComponent } from './Components/amenities/amenities.component';
 import { AddRoomComponent } from './Components/add-room/add-room.component';
-
+import { EditApartmentComponent } from './edit-apartment/edit-apartment.component';
+import { BookingListComponent } from './Components/booking-list/booking-list.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +35,7 @@ export const routes: Routes = [
         component: AddPropertyComponent,
         canActivate: [userauthGuard],
       },
+
       {
         path: 'add-property/hotel',
         component: AddHotelComponent,
@@ -61,7 +62,7 @@ export const routes: Routes = [
         canActivate: [userauthGuard],
       },
       {
-        path: 'reviews',
+        path: 'reviews/:id', 
         component: ReviewsComponent,
         canActivate: [userauthGuard],
       },
@@ -74,16 +75,22 @@ export const routes: Routes = [
         path: 'add-property/hotel/:id',
         component: AddHotelComponent,
         canActivate: [userauthGuard],
-    },
-    {
-      path: 'edit-Hotel/:id',
-      component: EditHotelComponent,
-      canActivate: [userauthGuard],
-  },
-  {path: 'visitor-chart',
-  component:VisitorChartComponent ,
-  canActivate: [userauthGuard],
-}
+      },
+      {
+        path: 'edit-Hotel/:id',
+        component: EditHotelComponent,
+        canActivate: [userauthGuard],
+      },
+      {
+        path: 'edit-Apartment/:id',
+        component: EditApartmentComponent,
+        canActivate: [userauthGuard],
+      },
+      {
+        path: 'BookingList/:id',
+        component: BookingListComponent,
+        canActivate: [userauthGuard],
+      },
     ],
   },
   { path: 'login', component: LoginComponent },

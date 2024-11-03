@@ -1,8 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  AfterViewChecked,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { MessageService } from '../../Services/messages/messages.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SocketService } from '../../Services/socket.service/socket.service';
 
 @Component({
   selector: 'app-messages',
@@ -11,21 +20,93 @@ import { CommonModule } from '@angular/common';
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css',
 })
-export class MessagesComponent {
+export class MessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
   chats: any[] = [];
   newMessage: string = '';
   selectedChat: any = null;
   currentUserId: string = '';
   currentUserName: string = '';
+  private subscriptions: any[] = [];
+  private shouldScrollToBottom = false;
+  @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   constructor(
     private messageService: MessageService,
-    private jwtService: JWTService
+    private jwtService: JWTService,
+    private socketService: SocketService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.getCurrentUserInfo();
     this.loadMessages();
+    this.setupSocketSubscriptions();
+  }
+
+  setupSocketSubscriptions() {
+    // Handle new messages
+    this.subscriptions.push(
+      this.socketService.newMessage$.subscribe((message) => {
+        this.handleNewMessage(message);
+      })
+    );
+
+    // Handle read messages
+    this.subscriptions.push(
+      this.socketService.messageRead$.subscribe((messageId) => {
+        this.handleMessageRead(messageId);
+      })
+    );
+  }
+
+  handleNewMessage(message: any) {
+    // Find the appropriate chat and add the message
+    const chatKey = message.hostId?._id || message.apartmentId?._id;
+    const existingChat = this.chats.find((chat) => chat.id === chatKey);
+
+    if (existingChat) {
+      const formattedMessage = {
+        id: message._id,
+        sender: {
+          _id: message.sender._id,
+          userName: message.sender.userName,
+        },
+        receiver: {
+          _id: message.receiver._id,
+          userName: message.receiver.userName,
+        },
+        content: message.content,
+        timestamp: message.timestamp,
+        read: message.read,
+      };
+
+      existingChat.messages = [...existingChat.messages, formattedMessage];
+
+      if (this.selectedChat && this.selectedChat.id === existingChat.id) {
+        this.selectedChat = { ...existingChat };
+        setTimeout(() => this.scrollToBottom(), 100);
+      }
+
+      this.cdr.detectChanges();
+    } else {
+      // If it's a new chat, reload all messages
+      this.loadMessages();
+    }
+  }
+
+  handleMessageRead(messageId: string) {
+    // Update the read status of the message in the UI
+    this.chats.forEach((chat) => {
+      const message = chat.messages.find((m: any) => m.id === messageId);
+      if (message) {
+        message.read = true;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    // Clean up subscriptions
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   getCurrentUserInfo() {
@@ -41,7 +122,17 @@ export class MessagesComponent {
     this.messageService.getMessages().subscribe(
       (groupedMessages) => {
         this.chats = groupedMessages;
-        console.log('Grouped messages:', this.chats);
+
+        if (this.selectedChat) {
+          const updatedSelectedChat = this.chats.find(
+            (chat) => chat.id === this.selectedChat.id
+          );
+          if (updatedSelectedChat) {
+            this.selectedChat = updatedSelectedChat;
+          }
+        }
+
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Error loading messages:', error);
@@ -52,6 +143,7 @@ export class MessagesComponent {
   selectChat(chat: any) {
     this.selectedChat = chat;
     this.markMessagesAsRead(chat);
+    setTimeout(() => this.scrollToBottom(), 100);
   }
 
   markMessagesAsRead(chat: any) {
@@ -81,28 +173,16 @@ export class MessagesComponent {
         content: this.newMessage,
       };
 
-      console.log('Sending message:', message);
-      console.log('Selected chat:', this.selectedChat);
-
       this.messageService.sendMessage(message).subscribe(
         (response) => {
-          console.log('Message sent successfully:', response);
-          response.sender = {
-            _id: this.currentUserId,
-            userName: this.currentUserName,
-          };
-          this.selectedChat.messages.push(response);
+          // Don't manually add the message here, it will come through the socket
           this.newMessage = '';
+          this.shouldScrollToBottom = true;
         },
         (error) => {
           console.error('Error sending message:', error);
         }
       );
-    } else {
-      console.log('Cannot send message: ', {
-        newMessage: this.newMessage,
-        selectedChat: this.selectedChat,
-      });
     }
   }
 
@@ -124,5 +204,23 @@ export class MessagesComponent {
 
   isCurrentUser(senderId: string): boolean {
     return senderId === this.currentUserId;
+  }
+
+  ngAfterViewChecked() {
+    if (this.shouldScrollToBottom) {
+      this.scrollToBottom();
+      this.shouldScrollToBottom = false;
+    }
+  }
+
+  private scrollToBottom(): void {
+    try {
+      if (this.messagesContainer) {
+        const element = this.messagesContainer.nativeElement;
+        element.scrollTop = element.scrollHeight;
+      }
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
   }
 }
