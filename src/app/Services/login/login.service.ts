@@ -15,7 +15,6 @@ export class LoginService {
     this.userLog.next(this.isUserLoggedIn);
   }
 
-  // دالة تسجيل الدخول باستخدام الرمز
   loginWithToken(token: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({

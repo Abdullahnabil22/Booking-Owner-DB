@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApartmentService } from '../Services/Apartment/apartment.service';
-import { Apartment } from '../model/Appartement';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ApartmentService } from '../../Services/Apartment/apartment.service';
+import { Apartment } from '../../model/Appartement';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,7 +15,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './edit-apartment.component.html',
-  styleUrls: ['./edit-apartment.component.css']
+  styleUrls: ['./edit-apartment.component.css'],
 })
 export class EditApartmentComponent implements OnInit {
   apartmentForm: FormGroup;
@@ -18,7 +23,13 @@ export class EditApartmentComponent implements OnInit {
   selectedFiles: File[] = [];
   imagePreviewUrls: string[] = [];
   errorMessage: string | null = null;
-  facilitiesList: string[] = ['WiFi', 'Parking', 'AirConditioning', 'SwimmingPool', 'Gym'];
+  facilitiesList: string[] = [
+    'WiFi',
+    'Parking',
+    'AirConditioning',
+    'SwimmingPool',
+    'Gym',
+  ];
   addressInput: string = '';
 
   constructor(
@@ -34,30 +45,30 @@ export class EditApartmentComponent implements OnInit {
     return this.formBuilder.group({
       name: this.formBuilder.group({
         en: ['', Validators.required],
-        ar: ['', Validators.required]
+        ar: ['', Validators.required],
       }),
       description: this.formBuilder.group({
         en: ['', Validators.required],
-        ar: ['', Validators.required]
+        ar: ['', Validators.required],
       }),
       subDescription: this.formBuilder.group({
         en: ['', Validators.required],
-        ar: ['', Validators.required]
+        ar: ['', Validators.required],
       }),
       phone: ['', Validators.required],
       location: this.formBuilder.group({
         address: this.formBuilder.group({
           en: ['', Validators.required],
-          ar: ['', Validators.required]
+          ar: ['', Validators.required],
         }),
         city: this.formBuilder.group({
           en: ['', Validators.required],
-          ar: ['', Validators.required]
+          ar: ['', Validators.required],
         }),
         country: this.formBuilder.group({
           en: ['', Validators.required],
-          ar: ['', Validators.required]
-        })
+          ar: ['', Validators.required],
+        }),
       }),
       HouseRules: this.formBuilder.group({
         NoSmoking: [false],
@@ -69,27 +80,30 @@ export class EditApartmentComponent implements OnInit {
         Cancellation: this.formBuilder.group({
           Policy: this.formBuilder.group({
             en: [''],
-            ar: ['']
+            ar: [''],
           }),
           Refundable: [false],
-          DeadlineDays: [0, Validators.min(0)]
-        })
+          DeadlineDays: [0, Validators.min(0)],
+        }),
       }),
       Rooms: this.formBuilder.group({
         Bedrooms: [0, [Validators.required, Validators.min(0)]],
         Bathrooms: [0, [Validators.required, Validators.min(0)]],
         LivingRooms: [0, [Validators.required, Validators.min(0)]],
         Kitchen: [0, [Validators.required, Validators.min(0)]],
-        Balcony: [0, [Validators.required, Validators.min(0)]]
+        Balcony: [0, [Validators.required, Validators.min(0)]],
       }),
       Facilities: this.formBuilder.group(
-        this.facilitiesList.reduce((acc, facility) => ({ ...acc, [facility]: [false] }), {})
-      )
+        this.facilitiesList.reduce(
+          (acc, facility) => ({ ...acc, [facility]: [false] }),
+          {}
+        )
+      ),
     });
   }
 
   ngOnInit(): void {
-    const apartmentId = this.activatedRoute.snapshot.paramMap.get("id");
+    const apartmentId = this.activatedRoute.snapshot.paramMap.get('id');
     if (apartmentId) {
       this.apartmentService.getAppartmentById(apartmentId).subscribe(
         (data: Apartment) => {
@@ -99,9 +113,9 @@ export class EditApartmentComponent implements OnInit {
             this.imagePreviewUrls = this.apartment.images;
           }
         },
-        error => {
-          console.error("Error fetching apartment:", error);
-          this.errorMessage = "Failed to load apartment data.";
+        (error) => {
+          console.error('Error fetching apartment:', error);
+          this.errorMessage = 'Failed to load apartment data.';
         }
       );
     }
@@ -118,7 +132,7 @@ export class EditApartmentComponent implements OnInit {
   }
 
   generateImagePreviews(files: File[]): void {
-    files.forEach(file => {
+    files.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.imagePreviewUrls.push(e.target.result);
@@ -134,7 +148,10 @@ export class EditApartmentComponent implements OnInit {
 
   onSubmit(): void {
     if (this.apartmentForm.valid) {
-      const updatedApartment: Apartment = { ...this.apartmentForm.value, _id: this.apartment?._id };
+      const updatedApartment: Apartment = {
+        ...this.apartmentForm.value,
+        _id: this.apartment?._id,
+      };
       this.updateApartment(updatedApartment);
     } else {
       this.errorMessage = 'Please fill all required fields correctly.';
@@ -143,8 +160,11 @@ export class EditApartmentComponent implements OnInit {
 
   updateApartment(updatedApartment: Apartment): void {
     if (this.selectedFiles.length > 0) {
-      this.uploadFiles().then(uploadedImageUrls => {
-        updatedApartment.images = [...(updatedApartment.images || []), ...uploadedImageUrls];
+      this.uploadFiles().then((uploadedImageUrls) => {
+        updatedApartment.images = [
+          ...(updatedApartment.images || []),
+          ...uploadedImageUrls,
+        ];
         this.sendUpdateRequest(updatedApartment);
       });
     } else {
@@ -154,23 +174,25 @@ export class EditApartmentComponent implements OnInit {
 
   uploadFiles(): Promise<string[]> {
     // Implement file upload logic here
-    return Promise.resolve([]);  // Placeholder
+    return Promise.resolve([]); // Placeholder
   }
 
   sendUpdateRequest(updatedApartment: Apartment): void {
     if (updatedApartment._id) {
-      this.apartmentService.updateDepartmentById(updatedApartment._id).subscribe(
-        () => {
-          console.log("Apartment updated successfully");
-          this.successUpdate();
-        },
-        (error) => {
-          console.error("Error updating apartment:", error);
-          this.errorMessage = "Failed to update apartment. Please try again.";
-        }
-      );
+      this.apartmentService
+        .updateDepartmentById(updatedApartment._id)
+        .subscribe(
+          () => {
+            console.log('Apartment updated successfully');
+            this.successUpdate();
+          },
+          (error) => {
+            console.error('Error updating apartment:', error);
+            this.errorMessage = 'Failed to update apartment. Please try again.';
+          }
+        );
     } else {
-      this.errorMessage = "Apartment ID is missing.";
+      this.errorMessage = 'Apartment ID is missing.';
     }
   }
 
