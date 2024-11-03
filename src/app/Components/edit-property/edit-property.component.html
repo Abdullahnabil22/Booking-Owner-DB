@@ -55,7 +55,7 @@
                 </div>
                 <div class="details-column">
                   <p><strong>Contact:</strong> {{ hotel.phone }}</p>
-                  <p class="approval-status" [class.approved]="hotel.approved">
+                  <p class="approval-status" [class.approved]="hotel.approved" (click)="hotel.approved ? navigateToBookingList(hotel._id) : null">
                     {{ hotel.approved ? 'Approved' : 'Not Approved' }}
                   </p>
                 </div>
