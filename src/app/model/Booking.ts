@@ -1,6 +1,6 @@
 export interface Payment {
     status: string;
-    date: Date; // تغيير إلى Date
+    date: Date;
     method: string;
     amount: number;
     coin: string;
