@@ -106,7 +106,7 @@ export class EditPropertyComponent implements OnInit {
             console.log('API Response:', response);
             hotel.isDisabled = true; 
             console.log(`Hotel with ID ${hotelId} is now disabled.`); 
-            this.hotels = [...this.hotels]; // تحديث المصفوفة
+            this.hotels = [...this.hotels]; 
             this.cdr.detectChanges(); // تحديث واجهة المستخدم
           },
           error: (err) => {
