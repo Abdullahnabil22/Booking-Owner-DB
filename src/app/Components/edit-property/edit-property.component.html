@@ -1,7 +1,36 @@
-<div class="container">
-  <h2 class="Apartments">Property</h2>
+<div class="search-container">
+  <div class="search-filter-wrapper">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterHotels()" 
+      placeholder="Search for hotels..." 
+      class="search-input" 
+    />
+    <button 
+      (click)="toggleFilterDropdown()" 
+      class="filter-button"
+    >
+      Filter Hotels
+    </button>
+    <div *ngIf="showFilterDropdown" class="filter-dropdown">
+      <div (click)="filterHotelsByRating(4)">
+        <span class="material-icons">star</span> 4 Stars & Above
+      </div>
+      <div (click)="filterHotelsByRating(3)">
+        <span class="material-icons">star</span> 3 Stars & Above
+      </div>
+      <div (click)="filterHotelsByRating(2)">
+        <span class="material-icons">star</span> 2 Stars & Above
+      </div>
+      <div (click)="filterHotelsByRating(1)">
+        <span class="material-icons">star</span> 1 Star & Above
+      </div>
+      <div (click)="resetFilter()">Reset Filter</div>
+    </div>
+  </div>
   
-  <div *ngIf="hotels.length > 0" class="property-list">
+  <div *ngIf="filteredHotels.length > 0" class="property-list">
     <table class="property-table">
       <thead>
         <tr>
@@ -13,8 +42,7 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let hotel of hotels; let i = index">
-        
+        <ng-container *ngFor="let hotel of filteredHotels; let i = index">
           <tr *ngIf="!hotel.isDisabled" (click)="toggleDetails(i)" [class.expanded]="expandedIndex === i">
             <td>
               <div class="property-card">

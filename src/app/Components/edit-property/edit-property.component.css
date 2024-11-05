@@ -243,6 +243,54 @@ h2 {
   color: #003b95;
   margin-bottom: 20px;
 }
+.filter-dropdown {
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  margin-top: 5px; 
+}
+
+.filter-dropdown div {
+  cursor: pointer; 
+  color: #003b95; 
+  text-decoration: underline; 
+}
+
+.material-icons {
+  vertical-align: middle; 
+  margin-right: 5px;
+}
+.search-container {
+  margin-bottom: 20px; /* إضافة مسافة أسفل حقل البحث */
+}
+
+.search-filter-wrapper {
+  display: flex; /* استخدام flexbox لتنسيق العناصر في صف */
+  align-items: center; /* محاذاة العناصر عموديًا في المنتصف */
+}
+
+.search-input {
+  flex: 1; /* جعل حقل البحث يأخذ المساحة المتاحة */
+  padding: 10px; /* إضافة حشوة داخلية */
+  font-size: 16px; /* زيادة حجم الخط */
+  border: 1px solid #ccc; /* إضافة حد */
+  border-radius: 5px; /* إضافة زوايا مدورة */
+  margin-right: 10px; /* إضافة مسافة بين حقل البحث وزر الفلتر */
+}
+
+.filter-button {
+  background-color: #003b95; /* لون خلفية الزر */
+  color: white; /* لون النص */
+  padding: 10px 15px; /* إضافة حشوة داخلية */
+  border: none; /* إزالة الحدود */
+  border-radius: 5px; /* إضافة زوايا مدورة */
+  cursor: pointer; /* تغيير شكل المؤشر عند التمرير فوق الزر */
+  font-size: 16px; /* زيادة حجم الخط */
+}
+
+.filter-button:hover {
+  background-color: #002a6b; /* تغيير لون الخلفية عند التمرير فوق الزر */
+}
 
 @media (max-width: 768px) {
   .property-table {
