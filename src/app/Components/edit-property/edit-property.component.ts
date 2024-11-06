@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // استيراد FormsModule
+import { FormsModule } from '@angular/forms';
 import { Hotel } from '../../model/hotel';
 import { HotelService } from '../../Services/hotel/hotel.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
@@ -11,7 +11,7 @@ import { ApartmentService } from './../../Services/Apartment/apartment.service';
 @Component({
   selector: 'app-edit-property',
   standalone: true,
-  imports: [CommonModule, FormsModule], // إضافة FormsModule هنا
+  imports: [CommonModule, FormsModule],
   templateUrl: './edit-property.component.html',
   styleUrls: ['./edit-property.component.css']
 })
@@ -115,8 +115,8 @@ export class EditPropertyComponent implements OnInit {
   }
 
   filterHotelsByRating(minRating: number): void {
-    this.filteredHotels = this.hotels.filter(hotel => hotel.AverageRating >= minRating);
-    this.showFilterDropdown = false; // إغلاق القائمة المنسدلة بعد التصفية
+    this.filteredHotels = this.hotels.filter(hotel => hotel.AverageRating == minRating);
+    this.showFilterDropdown = false; 
   }
 
   resetFilter(): void {
