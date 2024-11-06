@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorService } from '../error/error.service';
 import { catchError, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { User } from '../../model/user';
 
 @Injectable({
@@ -19,8 +19,10 @@ export class UserService {
       .pipe(catchError(this.errorHandler.handleError));
   }
   getUserById(userId: string): Observable<User> {
-    const name= this.http.get<any>(`http://localhost:3000/reviews/user/${userId}`);
-    console.log("name",name)
-    return name
+    const name = this.http.get<any>(
+      `http://localhost:3000/reviews/user/${userId}`
+    );
+    console.log('name', name);
+    return name;
   }
 }

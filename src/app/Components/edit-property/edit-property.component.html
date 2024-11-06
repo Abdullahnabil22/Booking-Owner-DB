@@ -1,3 +1,4 @@
+
 <div class="search-container">
   <div class="search-filter-wrapper">
     <input 
@@ -31,6 +32,7 @@
   </div>
   
   <div *ngIf="filteredHotels.length > 0" class="property-list">
+
     <table class="property-table">
       <thead>
         <tr>
@@ -42,34 +44,62 @@
         </tr>
       </thead>
       <tbody>
+
         <ng-container *ngFor="let hotel of filteredHotels; let i = index">
           <tr *ngIf="!hotel.isDisabled" (click)="toggleDetails(i)" [class.expanded]="expandedIndex === i">
+
             <td>
               <div class="property-card">
-                <img *ngIf="hotel.images.length > 0" [src]="hotel.images[0]" alt="{{ hotel.name.en }}" class="property-image"/>
+                <img
+                  *ngIf="hotel.images.length > 0"
+                  [src]="hotel.images[0]"
+                  alt="{{ hotel.name.en }}"
+                  class="property-image"
+                />
                 <div>
                   <h3>{{ hotel.name.en }}</h3>
                   <p class="sub-description">{{ hotel.subDescription.en }}</p>
                 </div>
               </div>
             </td>
-            <td>{{ hotel.location.city.en }}, {{ hotel.location.country.en }}</td>
+            <td>
+              {{ hotel.location.city.en }}, {{ hotel.location.country.en }}
+            </td>
             <td class="price">{{ hotel.PricePerNight | currency }}</td>
             <td>
               <div class="rating">
-                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-                  <span class="material-icons" [class.filled]="i < hotel.AverageRating">
+                <ng-container
+                  *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
+                >
+                  <span
+                    class="material-icons"
+                    [class.filled]="i < hotel.AverageRating"
+                  >
                     star
                   </span>
                 </ng-container>
-                <span *ngIf="hotel.AverageRating > 0">{{ hotel.AverageRating.toFixed(1) }}</span>
+                <span *ngIf="hotel.AverageRating > 0">{{
+                  hotel.AverageRating.toFixed(1)
+                }}</span>
                 <span *ngIf="hotel.AverageRating === 0">N/A</span>
               </div>
             </td>
             <td>
               <div class="button-group">
-                <button class="btn btn-primary" (click)="onUpdateHotel(hotel._id); $event.stopPropagation()" [disabled]="hotel.isDisabled">Update</button>
-                <button class="btn btn-danger" (click)="onDeleteHotel(hotel._id);" [disabled]="hotel.isDisabled">Delete</button>
+                <button
+                  class="btn btn-primary"
+                  (click)="onUpdateHotel(hotel._id); $event.stopPropagation()"
+                  [disabled]="hotel.isDisabled"
+                >
+                  Update
+                </button>
+                <button
+                  class="btn btn-danger"
+                  (click)="onDeleteHotel(hotel._id)"
+                  [disabled]="hotel.isDisabled"
+                >
+                  Delete
+                </button>
               </div>
             </td>
           </tr>
@@ -77,19 +107,39 @@
             <td colspan="5">
               <div class="property-details">
                 <div class="details-column">
-                  <p><strong>Description:</strong> {{ hotel.description.en }}</p>
-                  <p><strong>Address:</strong> {{ hotel.location.Address.en }}</p>
-                  <p><strong>Check-in:</strong> {{ hotel.CheckInTime }} | <strong>Check-out:</strong> {{ hotel.CheckOutTime }}</p>
+                  <p>
+                    <strong>Description:</strong>
+                    {{ hotel.description.en.substring(0, 80) }}...
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {{ hotel.location.Address.en }}
+                  </p>
+                  <p>
+                    <strong>Check-in:</strong> {{ hotel.CheckInTime }} |
+                    <strong>Check-out:</strong> {{ hotel.CheckOutTime }}
+                  </p>
                 </div>
                 <div class="details-column">
                   <p><strong>Contact:</strong> {{ hotel.phone }}</p>
-                  <p class="approval-status" [class.approved]="hotel.approved" (click)="hotel.approved ? navigateToBookingList(hotel._id) : null">
-                    {{ hotel.approved ? 'Approved' : 'Not Approved' }}
+
+                  <p
+                    class="approval-status"
+                    [class.approved]="hotel.approved"
+                    (click)="
+                      hotel.approved ? navigateToBookingList(hotel._id) : null
+                    "
+                  >
+                    {{ hotel.approved ? "Approved" : "Not Approved" }}
                   </p>
                 </div>
               </div>
               <div>
-                <button class="btn btn-primary" (click)="navigateToReviews(hotel._id)">Reviews</button>
+                <button
+                  class="btn btn-primary"
+                  (click)="navigateToReviews(hotel._id)"
+                >
+                  Reviews
+                </button>
               </div>
             </td>
           </tr>

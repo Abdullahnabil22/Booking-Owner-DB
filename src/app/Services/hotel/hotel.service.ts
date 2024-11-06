@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { JWTService } from '../JWT/jwt.service';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { Hotel } from '../../model/hotel';
@@ -61,11 +61,13 @@ export class HotelService {
   //   return this.http.patch<void>(`${this.apiUrl}/host/${hotelId}/disable`, { isDisabled: true });
   // }
   disableHotelById(hotelId: string): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/host/disable/${hotelId}`, { isDisabled: true }).pipe(
-      tap(response => console.log('Disable response:', response)) 
-    );
+    return this.http
+      .patch<void>(`${this.apiUrl}/host/disable/${hotelId}`, {
+        isDisabled: true,
+      })
+      .pipe(tap((response) => console.log('Disable response:', response)));
   }
-  
+
   /////////////////////////// update
 
   updateHotel(updatedHotel: Hotel): Observable<Hotel> {

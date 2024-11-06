@@ -9,7 +9,7 @@
           class="bg-white rounded-3 p-4 cursor shadow-lg d-flex align-items-center"
         >
           <div class="circle">
-            <span>{{ chat.sender.charAt(0) }}</span>
+            <span>{{ chat.sender?.charAt(0) }}</span>
           </div>
           <div class="d-flex flex-column">
             <span>{{ chat.sender }} to {{ chat.name }}</span>
@@ -28,7 +28,10 @@
         </div>
 
         <!-- Messages list -->
-        <div class="flex-grow-1 overflow-auto p-3 shadow-lg custom-chat-scroll">
+        <div
+          #messagesContainer
+          class="flex-grow-1 overflow-auto p-3 shadow-lg custom-chat-scroll"
+        >
           <div
             *ngFor="let message of selectedChat.messages"
             [ngClass]="{

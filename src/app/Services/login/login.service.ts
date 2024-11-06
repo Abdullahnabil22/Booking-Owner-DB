@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,6 @@ export class LoginService {
     this.userLog.next(this.isUserLoggedIn);
   }
 
-  // دالة تسجيل الدخول باستخدام الرمز
   loginWithToken(token: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -23,7 +22,11 @@ export class LoginService {
       }),
     };
 
-    return this.http.post(`${this.apiUrl}/user/loginWithToken`, { token }, httpOptions);
+    return this.http.post(
+      `${this.apiUrl}/user/loginWithToken`,
+      { token },
+      httpOptions
+    );
   }
 
   // دالة تسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور

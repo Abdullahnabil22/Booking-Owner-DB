@@ -12,8 +12,8 @@ import { userauthGuard } from './Guards/userauth.guard';
 import { EditHotelComponent } from './Components/edit-Hotel/edit-hotel/edit-hotel.component';
 import { AmenitiesComponent } from './Components/amenities/amenities.component';
 import { AddRoomComponent } from './Components/add-room/add-room.component';
-import { EditApartmentComponent } from './edit-apartment/edit-apartment.component';
 import { BookingListComponent } from './Components/booking-list/booking-list.component';
+import { EditApartmentComponent } from './Components/edit-apartment/edit-apartment.component';
 
 export const routes: Routes = [
   {
@@ -62,7 +62,7 @@ export const routes: Routes = [
         canActivate: [userauthGuard],
       },
       {
-        path: 'reviews/:id', 
+        path: 'reviews/:id',
         component: ReviewsComponent,
         canActivate: [userauthGuard],
       },
