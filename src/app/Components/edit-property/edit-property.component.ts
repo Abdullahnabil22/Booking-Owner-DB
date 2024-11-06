@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Hotel } from '../../model/hotel';
 import { HotelService } from '../../Services/hotel/hotel.service';
 import { JWTService } from '../../Services/JWT/jwt.service';
@@ -10,7 +11,7 @@ import { ApartmentService } from './../../Services/Apartment/apartment.service';
 @Component({
   selector: 'app-edit-property',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './edit-property.component.html',
   styleUrls: ['./edit-property.component.css']
 })
@@ -20,13 +21,17 @@ export class EditPropertyComponent implements OnInit {
   userId: string | null = null;
   expandedIndex: number = -1;
   expandedApartmentIndex: number = -1;
+  filteredHotels: Hotel[] = []; // الفنادق المصفاة
+  searchTerm: string = ''; // لتخزين قيمة حقل البحث
+  selectedHotel: Hotel | null = null; // لتخزين الفندق المحدد
+  showFilterDropdown: boolean = false; 
 
   constructor(
     private hotelService: HotelService,
     private jwtService: JWTService,
     private router: Router,
     private apartmentService: ApartmentService,
-    private cdr: ChangeDetectorRef // إضافة ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +59,7 @@ export class EditPropertyComponent implements OnInit {
       this.hotelService.getUserHotels(this.userId).subscribe({
         next: (data: Hotel[]) => {
           this.hotels = data;
+          this.filteredHotels = data; // تعيين الفنادق المصفاة
           console.log('Fetched hotels:', this.hotels);
         },
         error: (error) => {
@@ -86,6 +92,36 @@ export class EditPropertyComponent implements OnInit {
       console.error('User ID is null');
       this.apartments = []; 
     }
+  }
+
+  filterHotels(): void {
+    if (this.searchTerm) {
+      this.filteredHotels = this.hotels.filter(hotel =>
+        hotel.name.en.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredHotels = this.hotels; // إذا كان حقل البحث فارغًا، عرض جميع الفنادق
+    }
+  }
+
+  selectHotel(hotel: Hotel): void {
+    console.log('Selected hotel:', hotel);
+    this.selectedHotel = hotel; // تعيين الفندق المحدد
+    this.searchTerm = ''; // إفراغ حقل البحث
+  }
+
+  toggleFilterDropdown(): void {
+    this.showFilterDropdown = !this.showFilterDropdown; // تغيير حالة القائمة المنسدلة
+  }
+
+  filterHotelsByRating(minRating: number): void {
+    this.filteredHotels = this.hotels.filter(hotel => hotel.AverageRating == minRating);
+    this.showFilterDropdown = false; 
+  }
+
+  resetFilter(): void {
+    this.filteredHotels = this.hotels; // إعادة تعيين التصفية
+    this.showFilterDropdown = false; // إغلاق القائمة المنسدلة
   }
 
   onUpdateHotel(hotelId: string): void {
