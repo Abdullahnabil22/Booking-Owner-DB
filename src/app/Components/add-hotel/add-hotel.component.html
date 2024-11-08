@@ -1,4 +1,5 @@
-<div class="container mt-5">
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="container mt-5" *ngIf="!isLoading">
   <h2 id="add-your-hotel" class="mb-4 fw-medium">Add Your Hotel</h2>
 
   <form [formGroup]="hotelForm" (ngSubmit)="onSubmit()">
@@ -11,9 +12,21 @@
             <input
               type="text"
               class="form-control"
+              [class.is-invalid]="nameEnInvalid"
               id="nameEn"
               formControlName="en"
             />
+            <div class="invalid-feedback" *ngIf="nameEnInvalid">
+              <span *ngIf="hotelForm.get('name.en')?.errors?.['required']"
+                >Name in English is required</span
+              >
+              <span *ngIf="hotelForm.get('name.en')?.errors?.['minlength']"
+                >Name must be at least 3 characters</span
+              >
+              <span *ngIf="hotelForm.get('name.en')?.errors?.['maxlength']"
+                >Name cannot exceed 50 characters</span
+              >
+            </div>
           </div>
           <div class="col-md-6 mb-3">
             <label for="nameAr" class="form-label">Name (Arabic)</label>
@@ -33,9 +46,13 @@
             >
             <textarea
               class="form-control"
+              [class.is-invalid]="descriptionEnInvalid"
               id="descriptionEn"
               formControlName="en"
             ></textarea>
+            <div class="invalid-feedback" *ngIf="descriptionEnInvalid">
+              Description in English is required
+            </div>
           </div>
           <div class="col-md-6">
             <label for="descriptionAr" class="form-label"
@@ -77,9 +94,18 @@
           <input
             type="tel"
             class="form-control"
+            [class.is-invalid]="phoneInvalid"
             id="phone"
             formControlName="phone"
           />
+          <div class="invalid-feedback" *ngIf="phoneInvalid">
+            <span *ngIf="hotelForm.get('phone')?.errors?.['required']"
+              >Phone number is required</span
+            >
+            <span *ngIf="hotelForm.get('phone')?.errors?.['pattern']"
+              >Please enter a valid phone number</span
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -247,7 +273,7 @@
           <div class="row" formGroupName="Policy">
             <div class="col-md-6 mb-3">
               <label for="cancellationPolicyEn" class="form-label"
-                >Cancellation Policy (English)</label
+                >The Fine Print (English)</label
               >
               <textarea
                 class="form-control"
@@ -257,7 +283,7 @@
             </div>
             <div class="col-md-6 mb-3">
               <label for="cancellationPolicyAr" class="form-label"
-                >Cancellation Policy (Arabic)</label
+                >The Fine Print (Arabic)</label
               >
               <textarea
                 class="form-control"

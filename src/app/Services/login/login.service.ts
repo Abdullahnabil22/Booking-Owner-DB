@@ -44,15 +44,20 @@ export class LoginService {
   }
 
   get isUserLoggedIn(): boolean {
-    return localStorage.getItem('token') !== null;
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('token') !== null;
+    }
+    return false;
   }
 
   getUserStatus() {
-    return this.userLog.asObservable(); // تصحيح هنا
+    return this.userLog.asObservable();
   }
 
   logout() {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
     this.userLog.next(false);
   }
 }

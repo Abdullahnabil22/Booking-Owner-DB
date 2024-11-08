@@ -18,6 +18,7 @@ import { HotelService } from '../../Services/hotel/hotel.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 import { HeremapsService } from '../../Services/heremaps/heremaps.service';
+import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'app-add-hotel',
@@ -28,6 +29,7 @@ import { HeremapsService } from '../../Services/heremaps/heremaps.service';
     HttpClientModule,
     FormsModule,
     RouterModule,
+    LoadingComponent,
   ],
   providers: [HotelService],
   templateUrl: './add-hotel.component.html',
@@ -39,6 +41,7 @@ export class AddHotelComponent {
   selectedFiles: File[] = [];
   errorMessage: string = '';
   addressInput: string = '';
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -202,18 +205,46 @@ export class AddHotelComponent {
     this.hotelForm.patchValue({ images: this.selectedFiles });
   }
 
+  get nameEnInvalid() {
+    const control = this.hotelForm.get('name.en');
+    return control?.invalid && (control?.dirty || control?.touched);
+  }
+
+  get nameArInvalid() {
+    const control = this.hotelForm.get('name.ar');
+    return control?.invalid && (control?.dirty || control?.touched);
+  }
+
+  get descriptionEnInvalid() {
+    const control = this.hotelForm.get('description.en');
+    return control?.invalid && (control?.dirty || control?.touched);
+  }
+
+  get descriptionArInvalid() {
+    const control = this.hotelForm.get('description.ar');
+    return control?.invalid && (control?.dirty || control?.touched);
+  }
+
+  get phoneInvalid() {
+    const control = this.hotelForm.get('phone');
+    return control?.invalid && (control?.dirty || control?.touched);
+  }
+
   onSubmit() {
     if (this.hotelForm.valid && this.selectedFiles.length > 0) {
+      this.isLoading = true;
       const formData = this.hotelForm.value;
       formData.images = this.selectedFiles;
+
       this.hotelService.createHotel(formData, this.selectedFiles).subscribe(
         (response) => {
-          console.log('Hotel created successfully', response);
+          this.isLoading = false;
           this.router.navigate([
             '/add-property/amenities/' + response.data._id,
           ]);
         },
         (error) => {
+          this.isLoading = false;
           console.error('Error creating hotel', error);
           this.errorMessage =
             error.error.message ||
@@ -225,7 +256,13 @@ export class AddHotelComponent {
         'Please fill in all required fields and select at least one image.';
       Object.keys(this.hotelForm.controls).forEach((key) => {
         const control = this.hotelForm.get(key);
-        control!.markAsTouched();
+        if (control instanceof FormGroup) {
+          Object.keys(control.controls).forEach((nestedKey) => {
+            control.get(nestedKey)?.markAsTouched();
+          });
+        } else {
+          control?.markAsTouched();
+        }
       });
     }
   }

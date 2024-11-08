@@ -13,17 +13,14 @@ export class SocketService {
   private maxReconnectAttempts = 5;
   private reconnectInterval: any;
 
-  private notificationSubject = new BehaviorSubject<{
-    paypalEmail: string;
-    amount: number;
-  } | null>(null);
-  public notification$ = this.notificationSubject.asObservable();
-
   private newMessageSubject = new Subject<any>();
   public newMessage$ = this.newMessageSubject.asObservable();
 
   private messageReadSubject = new Subject<string>();
   public messageRead$ = this.messageReadSubject.asObservable();
+
+  private payoutStatusSubject = new Subject<any>();
+  public payoutStatus$ = this.payoutStatusSubject.asObservable();
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
@@ -77,16 +74,10 @@ export class SocketService {
       console.log('Received pong from server');
     });
 
-    this.socket.on(
-      'payout_request',
-      (notification: { paypalEmail: string; amount: number }) => {
-        console.log('Received payout request:', notification);
-        this.notificationSubject.next(notification);
-        setTimeout(() => {
-          this.notificationSubject.next(null);
-        }, 5000);
-      }
-    );
+    this.socket.on('payout_status_update', (data) => {
+      console.log('Payout status update:', data);
+      this.payoutStatusSubject.next(data);
+    });
 
     this.socket.on('new_message', (message: any) => {
       console.log('Received new message:', message);
@@ -119,7 +110,7 @@ export class SocketService {
     if (this.socket) {
       this.socket.off('connect');
       this.socket.off('connect_error');
-      this.socket.off('payout_request');
+      this.socket.off('payout_status_update');
       this.socket.off('pong');
       this.socket.disconnect();
     }

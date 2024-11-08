@@ -1,4 +1,22 @@
 <div class="container">
+  <div *ngIf="payoutNotification" class="row mb-3">
+    <div class="col-12">
+      <div
+        class="alert alert-{{
+          payoutNotification.type
+        }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ payoutNotification.message }}
+        <button
+          type="button"
+          class="btn-close"
+          (click)="payoutNotification = null"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col-12 col-md-6">
       <div class="card rounded-4 p-3 text-black dashboard-card">

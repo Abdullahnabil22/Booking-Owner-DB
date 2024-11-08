@@ -1,3 +1,5 @@
+<app-loading *ngIf="isLoading"></app-loading>
+
 <form [formGroup]="amenitiesForm" (ngSubmit)="onSubmit()">
   <div class="card mb-4" *ngFor="let amenityGroup of amenityGroups">
     <div class="card-header main-color-bg text-white">

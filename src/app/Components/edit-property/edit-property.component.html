@@ -1,17 +1,13 @@
-
 <div class="search-container">
   <div class="search-filter-wrapper">
-    <input 
-      type="text" 
-      [(ngModel)]="searchTerm" 
-      (input)="filterHotels()" 
-      placeholder="Search for hotels..." 
-      class="search-input" 
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filterHotels()"
+      placeholder="Search for hotels..."
+      class="search-input"
     />
-    <button 
-      (click)="toggleFilterDropdown()" 
-      class="filter-button"
-    >
+    <button (click)="toggleFilterDropdown()" class="filter-button">
       Filter Hotels
     </button>
     <div *ngIf="showFilterDropdown" class="filter-dropdown">
@@ -30,24 +26,25 @@
       <div (click)="resetFilter()">Reset Filter</div>
     </div>
   </div>
-  
-  <div *ngIf="filteredHotels.length > 0" class="property-list">
 
+  <div *ngIf="filteredHotels.length > 0" class="property-list">
     <table class="property-table">
       <thead>
         <tr>
           <th>Property</th>
           <th>Location</th>
-          <th>Price per Night</th>
+          <th>Status</th>
           <th>Rating</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-
         <ng-container *ngFor="let hotel of filteredHotels; let i = index">
-          <tr *ngIf="!hotel.isDisabled" (click)="toggleDetails(i)" [class.expanded]="expandedIndex === i">
-
+          <tr
+            *ngIf="!hotel.isDisabled"
+            (click)="toggleDetails(i)"
+            [class.expanded]="expandedIndex === i"
+          >
             <td>
               <div class="property-card">
                 <img
@@ -65,7 +62,15 @@
             <td>
               {{ hotel.location.city.en }}, {{ hotel.location.country.en }}
             </td>
-            <td class="price">{{ hotel.PricePerNight | currency }}</td>
+            <td
+              class="price fw-normal"
+              [ngClass]="{
+                'text-success ': hotel.approved,
+                'text-warning': !hotel.approved
+              }"
+            >
+              {{ hotel.approved ? "Approved" : "Pending" }}
+            </td>
             <td>
               <div class="rating">
                 <ng-container
@@ -129,7 +134,7 @@
                       hotel.approved ? navigateToBookingList(hotel._id) : null
                     "
                   >
-                    {{ hotel.approved ? "Approved" : "Not Approved" }}
+                    {{ hotel.approved ? "See Bookings" : "Pending" }}
                   </p>
                 </div>
               </div>

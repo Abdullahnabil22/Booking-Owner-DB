@@ -14,11 +14,12 @@ import {
   facilitiesAmenities,
 } from '../../schemas/amenities';
 import { AmenitiesService } from '../../Services/Amenities/amenities.service';
+import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'app-amenities',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
   templateUrl: './amenities.component.html',
   styleUrl: './amenities.component.css',
 })
@@ -64,6 +65,7 @@ export class AmenitiesComponent {
     },
     { name: 'facilities', title: 'Facilities', amenities: facilitiesAmenities },
   ];
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -99,17 +101,18 @@ export class AmenitiesComponent {
 
   onSubmit() {
     if (this.amenitiesForm.valid) {
+      this.isLoading = true;
       const formattedAmenities = this.formatAmenities(this.amenitiesForm.value);
-      console.log('Sending amenities:', formattedAmenities);
 
       this.amenitiesService
         .postAmenitiesByHotelId(this.hotelId, formattedAmenities)
         .subscribe(
           (response) => {
-            console.log('Amenities posted successfully', response);
+            this.isLoading = false;
             this.router.navigate(['/add-property/room/' + this.hotelId]);
           },
           (error) => {
+            this.isLoading = false;
             console.error('Error posting amenities', error);
           }
         );

@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsService } from '../../Services/chart/charts.service';
 import { OwnerService } from '../../Services/owner/owner.service';
 import { PayoutServiceService } from '../../Services/payoutService/payout-service.service';
+import { SocketService } from '../../Services/socket.service/socket.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -35,12 +36,17 @@ export class DashboardComponent {
   currentBalance: number = 0;
   showPayoutForm = false;
   paypalEmail = '';
+  payoutNotification: {
+    message: string;
+    type: 'success' | 'warning' | 'danger';
+  } | null = null;
   constructor(
     private chartService: ChartsService,
     private userService: UserService,
     private jwtService: JWTService,
     private ownerService: OwnerService,
-    private payoutService: PayoutServiceService
+    private payoutService: PayoutServiceService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -58,6 +64,22 @@ export class DashboardComponent {
       } else {
         this.currentBalance = 0;
       }
+    });
+
+    this.socketService.payoutStatus$.subscribe((data) => {
+      this.payoutNotification = {
+        message: data.message,
+        type:
+          data.status === 'PAID'
+            ? 'success'
+            : data.status === 'PENDING'
+            ? 'warning'
+            : 'danger',
+      };
+
+      setTimeout(() => {
+        this.payoutNotification = null;
+      }, 5000);
     });
   }
 
@@ -98,22 +120,36 @@ export class DashboardComponent {
     );
   }
   requestPayout() {
-    if (!this.paypalEmail || this.totalFunds <= 0) return;
+    if (!this.paypalEmail) {
+      console.error('PayPal email is required');
+      return;
+    }
 
-    this.payoutService
-      .requestPayout({
-        owner_id: this.ownerId,
-        amount: this.totalFunds,
-        paypalEmail: this.paypalEmail,
-      })
-      .subscribe(
-        (response) => {
-          console.log('Payout requested successfully:', response);
-          this.showPayoutForm = false;
-        },
-        (error) => {
-          console.error('Error requesting payout:', error);
+    if (this.currentBalance <= 0) {
+      console.error('Cannot request payout with zero or negative balance');
+      return;
+    }
+
+    const payoutRequest = {
+      owner_id: this.ownerId,
+      amount: this.currentBalance,
+      paypalEmail: this.paypalEmail.trim(),
+    };
+
+    console.log('Sending payout request:', payoutRequest);
+
+    this.payoutService.requestPayout(payoutRequest).subscribe({
+      next: (response) => {
+        console.log('Payout requested successfully:', response);
+        this.showPayoutForm = false;
+        this.ngOnInit();
+      },
+      error: (error) => {
+        console.error('Error requesting payout:', error);
+        if (error.status === 400) {
+          console.error('Invalid request data:', error.error);
         }
-      );
+      },
+    });
   }
 }
